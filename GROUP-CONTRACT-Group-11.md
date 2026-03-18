@@ -1,8 +1,10 @@
 # HIT237-Group-11
 
+**Group Contract Version:** 1.0 | **Last Updated:** 18/03/2026
+
 # 1.0 Terms and Conditions
 ## 1.1 Group Allocation
-All members should receive the same mark if they contribute the agreed upon workload (otherwise lecturer will be contacted). A fair contribution should be an amount of work that all team members agree, and should take up roughly 25% of the total time required by all students to finish the work.
+All members should receive the same mark if they contribute the agreed upon workload (otherwise the group will proceed with steps outlined in Conflict Resolution). A fair contribution should be an amount of work that all team members agree, and should take up roughly 25% of the total time required by all students to finish the work.
 
 ## 1.2 Communication
 MS Teams will be the primary source of communication. Replies are expected in 24 hours. If there is no reply within that time, team member/s will send messages through learnline and email. MS Teams should be installed on all phones so that team members can call eachother in case of emergency. (for example a small portion of code is missing, and there is only a few hours until a deadline is due)
@@ -28,7 +30,7 @@ AI coding assistants are permitted as per assessment specifications. Any signifi
 
 ## 1.7 Amending the Contract
 It is expected that the Contract will frequently be amended as the team progresses through the assessments.
-Any member may propose an amendment by posting in the group Microsoft Teams channel. The proposal must remain open for at least 24 hours to allow all members to respond. Amendments require agreement from at least three of four members. The amending member then updates the markdown file, and commits with a message that includes the reason and section amended.
+Any member may propose an amendment by posting in the group Microsoft Teams channel. The proposal must remain open for at least 24 hours to allow all members to respond. Amendments require agreement from at least three of four members. The amending member then updates the markdown file and the contract version and date, then commits with a message that includes the reason and section amended.
 
 
 # 2.0 Provisional Milestones and Checkpoints

@@ -1,6 +1,6 @@
 # HIT237-Group-11
 
-**Group Contract Version:** 1.0 | **Last Updated:** 18/03/2026
+**Group Contract Version:** 1.1 | **Last Updated:** 18/03/2026
 
 # 1.0 Terms and Conditions
 ## 1.1 Group Allocation
@@ -35,7 +35,33 @@ Any member may propose an amendment by posting in the group Microsoft Teams chan
 
 # 2.0 Provisional Milestones and Checkpoints
 ## 2.1 Key milestones with target dates for each assessment
-To be added
+
+(Milestone 1: Target Date - 23/03) Initial Assessment discussion, team member role assignment, expectations and requirements from the team.
+Following project theme (5), assign design and development roles to team members for each part of the web app. completed tasks uploaded to GitHub to be merged. following code design and implementation requirements according to task (Django).
+
+(Milestone 2: Target Date - 30/03) Follow up with team on individual task progression, discuss any barriers/blockers that might need to be addressed and propose resolutions and review code/design progress. Contribute to Architectural Decision Record (ADR) as well as update project plan and group contract (GitHub).
+
+(Milestone 3: Target Date 7/04) Finalize project and merge pending changes with GitHub project. Perform testing prepare documentation to ensure there are no errors. Update ADR, project plan and group contract.
+
+(Milestone 4: Target Date 14/04) Assessment 2 Submission. Meeting to reflect on deliverables, discuss and prepare initial requirements and scope for Assessment 4. Distribute tasks for team members
+
+Submission includes:
+    - The ADR as a Markdown (.md) file
+    - The complete, runnable Django app
+    - The updated project plan and contract as a Markdown (.md) file
+    - Supplementary materials
+    - The requirements.txt file
+
+(Milestone 5: Target Date 21/04) Follow up with team on individual task progression, discuss any barriers/blockers that might need to be addressed and propose resolutions and review code/design progress. Include supplementary materials.
+
+(Milestone X: Target Date 28/05) Assessment 4 Submission. Meeting to reflect on deliverables and overall team work.
+
+Submission includes:
+    - The ADR as a Markdown (.md) file
+    - The complete, runnable Django app
+    - The updated project plan and contract as a Markdown (.md) file
+    - Supplementary materials
+    - The requirements.txt file
 
 ## 2.2 Task breakdowns showing how the assessed topics will be tackled and by whom
 To be added
@@ -51,5 +77,5 @@ At each weekly Monday meeting the team will assess individual progress and agree
 |--------------|------------|--------------------------|
 | Isaac Jessen | s388590    | isaac.b.jessen@gmail.com |
 | Melanie Bardoux | s329560 | s329560@students.cdu.edu.au |
-| a            | b          | c                        |
+| Jack Manning | s303126 | s303126@students.cdu.edu.au |
 | a            | b          | c                        |

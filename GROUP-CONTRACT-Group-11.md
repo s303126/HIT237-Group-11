@@ -66,7 +66,7 @@ Submission includes:
 
 ## 2.2 Task breakdowns showing how the assessed topics will be tackled and by whom
 
-To ensure balanced conditions and clear responsibility throughout the project, the work for the Django application will be divided into the following roles and responsibilities: 
+To ensure balanced contributions and clear responsibility throughout the project, the work for the Django application will be divided into the following roles and responsibilities: 
 
 ### Backend Architecture and Data Modelling - Student A
     -	Design Django models representing species recordings, locations and observations

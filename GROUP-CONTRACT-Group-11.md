@@ -63,8 +63,42 @@ Submission includes:
     - Supplementary materials
     - The requirements.txt file
 
+
 ## 2.2 Task breakdowns showing how the assessed topics will be tackled and by whom
-To be added
+
+To ensure balanced conditions and clear responsibility throughout the project, the work for the Django application will be divided into the following roles and responsibilities: 
+
+### Backend Architecture and Data Modelling - Student A
+    -	Design Django models representing species recordings, locations and observations
+    -	Use Django ORM to implement relationships between entities
+    -	Use Django QuerySet APIs to retrieve and filter biodiversity data
+    -	Produce ER diagrams showing data relationships
+
+### Application Logic and Views - Student B
+    -	Implement application logic using Django class-based views
+    -	Handle requests for audio recording submission and view of species data
+    -	Ensure views interact correctly with models and templates
+    -	Apply Django design philosophies
+
+### User interface and Templates - Student C
+    -	Develop front-end interface using Django templates
+    -	Implement pages for recording submission and viewing timelines of observations
+    -	Integrate Django Template Language (DTL) variables
+    -	Build templates and UI, and maintain for consistency and usability
+
+### Data Handling, Testing and Integration - Student D
+    -	Assist with QuerySet optimisation and data handling
+    -	Lead integration of components during checkpoints
+    -	Assist with testing and debugging across applications
+    -	Ensure merged components function correctly together
+
+### Architectural Decision Records (ADR) and Documentation:
+    -	All members participate in coding, testing and debugging
+    -	All members contribute to the ADR; entries demonstrate understanding of all implemented features, including AI-assisted code 
+    -	Contributions are managed with Git branches and pull requests 
+    -	All entries must include context, alternatives, decision rationale and code references
+    -	All members must document decisions related to their work 
+
 
 ## 2.3 Internal checkpoints or review points where the team will assess progress
 To be added
@@ -73,9 +107,9 @@ To be added
 At each weekly Monday meeting the team will assess individual progress and agree on an integration point date, which will be recorded in the meeting minutes. Team members work on their individual tasks until the agreed date, at which point work is merged into the main branch. Members then have 48 hours to test and review the combined codebase, raising and resolving any conflicts via the Microsoft Teams group chat. Integration must occur at least fortnightly to ensure conflicts and issues are identified and resolved early.
 
 # Contributors
-| Name         | Student-id | email                    |
-|--------------|------------|--------------------------|
-| Isaac Jessen | s388590    | isaac.b.jessen@gmail.com |
-| Melanie Bardoux | s329560 | s329560@students.cdu.edu.au |
-| Jack Manning | s303126 | s303126@students.cdu.edu.au |
-| a            | b          | c                        |
+| Name            | Student-id | email                       |
+|-----------------|------------|-----------------------------|
+| Isaac Jessen    | s388590    | isaac.b.jessen@gmail.com    |
+| Melanie Bardoux | s329560    | s329560@students.cdu.edu.au |
+| Jack Manning    | s303126    | s303126@students.cdu.edu.au |
+| Aaron Madelo    | s389992    | s389992@students.cdu.edu.au |

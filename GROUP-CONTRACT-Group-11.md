@@ -101,7 +101,18 @@ To ensure balanced contributions and clear responsibility throughout the project
 
 
 ## 2.3 Internal checkpoints or review points where the team will assess progress
-To be added
+
+| Date | Topic                                                                                                                                                                                                                           | Method  |
+|------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| 23/3 | Weekly Chekup                                                                                                                                                                                                                   | Meeting |
+| 30/3 | Weekly Checkup                                                                                                                                                                                                                  | Meeting |
+| 6/4  | Weekly Checkup                                                                                                                                                                                                                  | Meeting |
+| 10/4 | All team members confirm if any last tasks are on track to be completed before 14/4                                                                                                                                             | Meeting |
+| 13/4 | No meeting as the assignment is due the following day, so any problems should already have been shared via message.   Team members confirm that all tasks have been completed and that the assignment is ready to be submitted. | Message |
+| 20/4 | Discuss steps toward planning assessment 4                                                                                                                                                                                      | Meeting |
+| n/a  | Team members create post when they’ve completed a task or encounter any roadblocks (this can then be resolved either in the next meeting or immediately depending on urgency)                                                   | Message |
+| n/a  | Weekly meetings will continue once plans are made from the 20/4 meeting                                                                                                                                                         |         |
+
 
 ## 2.4 Integration Points
 At each weekly Monday meeting the team will assess individual progress and agree on an integration point date, which will be recorded in the meeting minutes. Team members work on their individual tasks until the agreed date, at which point work is merged into the main branch. Members then have 48 hours to test and review the combined codebase, raising and resolving any conflicts via the Microsoft Teams group chat. Integration must occur at least fortnightly to ensure conflicts and issues are identified and resolved early.

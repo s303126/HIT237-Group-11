@@ -68,25 +68,25 @@ Submission includes:
 
 To ensure balanced contributions and clear responsibility throughout the project, the work for the Django application will be divided into the following roles and responsibilities: 
 
-### Backend Architecture and Data Modelling - Student A
+### Backend Architecture and Data Modelling - Jack Manning
     -	Design Django models representing species recordings, locations and observations
     -	Use Django ORM to implement relationships between entities
     -	Use Django QuerySet APIs to retrieve and filter biodiversity data
     -	Produce ER diagrams showing data relationships
 
-### Application Logic and Views - Student B
+### Application Logic and Views - Isaac Jessen 
     -	Implement application logic using Django class-based views
     -	Handle requests for audio recording submission and view of species data
     -	Ensure views interact correctly with models and templates
     -	Apply Django design philosophies
 
-### User interface and Templates - Student C
+### User interface and Templates - Aaron Madelo
     -	Develop front-end interface using Django templates
     -	Implement pages for recording submission and viewing timelines of observations
     -	Integrate Django Template Language (DTL) variables
     -	Build templates and UI, and maintain for consistency and usability
 
-### Data Handling, Testing and Integration - Student D
+### Data Handling, Testing and Integration - Melanie Bardoux
     -	Assist with QuerySet optimisation and data handling
     -	Lead integration of components during checkpoints
     -	Assist with testing and debugging across applications

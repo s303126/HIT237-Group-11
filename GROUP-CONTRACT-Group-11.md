@@ -86,11 +86,11 @@ To ensure balanced contributions and clear responsibility throughout the project
     -	Integrate Django Template Language (DTL) variables
     -	Build templates and UI, and maintain for consistency and usability
 
-### Data Handling, Testing and Integration - Melanie Bardoux
-    -	Assist with QuerySet optimisation and data handling
-    -	Lead integration of components during checkpoints
-    -	Assist with testing and debugging across applications
-    -	Ensure merged components function correctly together
+### QuerySet APIs, Data Managemnet and Documentation - Melanie Bardoux
+    -	Write and manage all QuerySet APIs across the project
+    -	Manage and maintain project data including sourcing and importing species data
+    -	Create and maintain the ERD and supplementary materials including class diagrams
+    -	Set up and maintain the ADR, ensuring all entries follow the correct structure and required information
 
 ### Architectural Decision Records (ADR) and Documentation:
     -	All members participate in coding, testing and debugging

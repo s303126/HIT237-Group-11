@@ -1,6 +1,6 @@
-Title: Use and implement class "ThreatStatus", "Group", "Species" and "Anomoly" models in models.py.
+Title: Use and implement class "ThreatStatus", "Group", "Species", "Anomoly", "User" and "Recording" models in models.py with methods.
 
-Status: Proposed
+Status: Accepted.
 
 Context: What problem or requirement prompted this decision? Topics align with selected project theme requirements.
 

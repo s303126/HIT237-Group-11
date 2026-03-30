@@ -1,4 +1,4 @@
-Title: Use and implement class "ThreatStatus", "Group", "Species" models in models.py.
+Title: Use and implement class "ThreatStatus", "Group", "Species" and "Anomoly" models in models.py.
 
 Status: Proposed
 

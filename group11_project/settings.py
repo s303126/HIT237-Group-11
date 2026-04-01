@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'group11_app',
 ]
 
 MIDDLEWARE = [
@@ -68,6 +69,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'group11_project.wsgi.application'
 
+UTH_USER_MODEL = 'group11_app.User'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

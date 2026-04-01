@@ -40,7 +40,7 @@ class FaunaGroup(models.Model):
         from django.utils import timezone
         cutoff = timezone.now() - timezone.timedelta(days=days)
         return Recording.objects.filter(
-            species__fauna_group=self,
+            species__group=self,
             date_recorded__gte=cutoff
         )
 

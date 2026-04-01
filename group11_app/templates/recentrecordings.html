@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Recent Recordings</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<header>
+  <h1>Recent Species Recordings</h1>
+</header>
+
+<nav>
+  <a href="{% url 'homepage' %}">Home</a>
+  <a href="{% url 'submit_recording' %}">Submit Recording</a>
+</nav>
+
+<main>
+  <section>
+    <h2>Timeline</h2>
+
+    {% for rec in recordings %}
+      <div class="record-card">
+        <h3>{{ rec.species.common_name }}</h3>
+        <p><strong>Date:</strong> {{ rec.date_recorded|date:"d M Y" }}</p>
+        <p><strong>Location:</strong> {{ rec.location_name }}</p>
+        <p><strong>Confidence:</strong> {{ rec.confidence_score|floatformat:0 }}%</p>
+
+        <form method="post" action="{% url 'flag_anomaly' rec.id %}">
+          {% csrf_token %}
+          <button type="submit">Flag Anomaly</button>
+        </form>
+      </div>
+    {% empty %}
+      <p>No recordings yet.</p>
+    {% endfor %}
+  </section>
+</main>
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

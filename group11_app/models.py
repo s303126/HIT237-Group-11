@@ -20,7 +20,7 @@ class ThreatStatus(models.Model):
         """Returns all statuses considered actively threatened."""
         return cls.objects.exclude(code__in=['LC', 'DD'])
 
-class Group(models.Model):
+class FaunaGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
     icon = models.ImageField(upload_to='icon/')
     
@@ -47,7 +47,7 @@ class Group(models.Model):
 class Species(models.Model):
     common_name = models.CharField(max_length=100)
     scientific_name = models.CharField(max_length=100, unique=True)
-    group = models.ForeignKey(Group, on_delete=models.PROTECT)
+    fauna_group = models.ForeignKey(FaunaGroup, on_delete=models.PROTECT)
     threat_status = models.ForeignKey(ThreatStatus, null=True, blank=True, on_delete=models.SET_NULL)
     is_native = models.BooleanField(default=False)
     is_introduced = models.BooleanField(default=False)
@@ -78,7 +78,7 @@ class Species(models.Model):
 
     def get_flagged_recordings(self):
         """Returns all recordings for this species flagged as anomalies."""
-        return self.recording_set.filter(is_anomoly=True)
+        return self.recording_set.filter(is_anomaly=True)
 
 class User(AbstractUser):
     ROLE_TYPES = [
@@ -107,7 +107,7 @@ class User(AbstractUser):
 
     def get_flagged_submissions(self):
         """Returns this user's recordings that have been flagged as anomalies."""
-        return self.recording_set.filter(is_anomoly=True)
+        return self.recording_set.filter(is_anomaly=True)
 
 class Recording(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -120,22 +120,22 @@ class Recording(models.Model):
     location_name = models.CharField(max_length=100, blank=True)
     confidence_score = models.DecimalField(max_digits=3, decimal_places=2)  # 0.00–1.00
     notes = models.TextField(blank=True)
-    is_anomoly = models.BooleanField(default=False)
-    anomoly_flag_reason = models.TextField(blank=True)
+    is_anomaly = models.BooleanField(default=False)
+    anomaly_flag_reason = models.TextField(blank=True)
     
     def __str__(self):
         return f"{self.species} — {self.date_recorded:%Y-%m-%d} by {self.user}"
     
     def flag(self, reason=''):
         """Flags this recording as an anomaly and saves."""
-        self.is_anomoly = True
-        self.anomoly_flag_reason = reason
+        self.is_anomaly = True
+        self.anomaly_flag_reason = reason
         self.save()
 
     def unflag(self):
         """Clears the anomaly flag on this recording."""
-        self.is_anomoly = False
-        self.anomoly_flag_reason = ''
+        self.is_anomaly = False
+        self.anomaly_flag_reason = ''
         self.save()
 
     def is_low_confidence(self, threshold=0.4):
@@ -144,11 +144,11 @@ class Recording(models.Model):
 
     def get_anomalies(self):
         """Returns all Anomaly reports linked to this recording."""
-        return self.anomoly_set.all()
+        return self.anomaly_set.all()
 
     def has_unresolved_anomalies(self):
         """Returns True if any linked Anomaly records are unresolved."""
-        return self.anomoly_set.filter(resolved=False).exists()
+        return self.anomaly_set.filter(resolved=False).exists()
 
     @classmethod
     def get_timeline(cls, days=30):
@@ -163,10 +163,10 @@ class Recording(models.Model):
     def get_flagged(cls):
         """Returns all flagged recordings with related data prefetched."""
         return cls.objects.filter(
-            is_anomoly=True
+            is_anomaly=True
         ).select_related('species', 'user')
     
-class Anomoly(models.Model):
+class Anomaly(models.Model):
     REASON_CHOICES = [
         ('wrong_species', 'Wrong Species'),
         ('poor_quality',  'Poor Audio Quality'),

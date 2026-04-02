@@ -87,6 +87,16 @@ class User(AbstractUser):
     ]
     role = models.CharField(max_length=20, default='citizen_scientist', choices=ROLE_TYPES)
     bio = models.TextField(blank=True)
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='custom_user_set',
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='custom_user_set',
+        blank=True
+    )
     
     def __str__(self):
         return f"{self.username} ({self.role})"

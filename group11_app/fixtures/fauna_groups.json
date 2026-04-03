@@ -1,0 +1,8 @@
+[
+  {"model": "group11_app.faunagroup", "pk": 1, "fields": {"name": "Mammals", "icon": ""}},
+  {"model": "group11_app.faunagroup", "pk": 2, "fields": {"name": "Birds", "icon": ""}},
+  {"model": "group11_app.faunagroup", "pk": 3, "fields": {"name": "Reptiles", "icon": ""}},
+  {"model": "group11_app.faunagroup", "pk": 4, "fields": {"name": "Frogs", "icon": ""}},
+  {"model": "group11_app.faunagroup", "pk": 5, "fields": {"name": "Fish", "icon": ""}},
+  {"model": "group11_app.faunagroup", "pk": 6, "fields": {"name": "Invertebrates", "icon": ""}}
+] 

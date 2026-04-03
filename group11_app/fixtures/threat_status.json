@@ -1,0 +1,15 @@
+[
+  {"model": "group11_app.threatstatus", "pk": 1, "fields": {"code": "EX", "label": "Extinct", "description": "Species no longer exists anywhere in the world"}},
+  {"model": "group11_app.threatstatus", "pk": 2, "fields": {"code": "EW", "label": "Extinct in the Wild", "description": "Species survives only in captivity or cultivation"}},
+  {"model": "group11_app.threatstatus", "pk": 3, "fields": {"code": "CR", "label": "Critically Endangered", "description": "Species faces extremely high risk of extinction"}},
+  {"model": "group11_app.threatstatus", "pk": 4, "fields": {"code": "EN", "label": "Endangered", "description": "Species faces very high risk of extinction"}},
+  {"model": "group11_app.threatstatus", "pk": 5, "fields": {"code": "VU", "label": "Vulnerable", "description": "Species faces high risk of extinction"}},
+  {"model": "group11_app.threatstatus", "pk": 6, "fields": {"code": "NT", "label": "Near Threatened", "description": "Species is close to qualifying as threatened"}},
+  {"model": "group11_app.threatstatus", "pk": 7, "fields": {"code": "LC", "label": "Least Concern", "description": "Species does not qualify for a threatened category"}},
+  {"model": "group11_app.threatstatus", "pk": 8, "fields": {"code": "DD", "label": "Data Deficient", "description": "Insufficient data to assess risk of extinction"}},
+  {"model": "group11_app.threatstatus", "pk": 9, "fields": {"code": "CR-PE", "label": "Critically Endangered, Possibly Extinct", "description": "Species is critically endangered globally and may already be extinct in the Northen Territory"}},
+  {"model": "group11_app.threatstatus", "pk": 10, "fields": {"code": "EN-EXNT", "label": "Endangered, Extinct in the NT", "description": "Species is endangered globally but extinct in the Northern Territory"}},
+  {"model": "group11_app.threatstatus", "pk": 11, "fields": {"code": "EN-EWNT", "label": "Endangered, Extinct in the Wild in the NT", "description": "Species is endangered globally and extinct in the wild in the Northern Territory"}},
+  {"model": "group11_app.threatstatus", "pk": 12, "fields": {"code": "VU-EXNT", "label": "Vulnerable, Extinct in the NT", "description": "Species is vulnerable globally but extinct in the Northern Territory"}},
+  {"model": "group11_app.threatstatus", "pk": 13, "fields": {"code": "LC-EXNT", "label": "Least Concern, Extinct in the NT", "description": "Species is least concern globally but extinct in the Northern Territory"}}
+]

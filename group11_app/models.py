@@ -188,8 +188,10 @@ class RecordingManager(models.Manager):
     
     def get_by_threatened_species(self):
         # Returns all recordings of threatened species only
+        # Excludes LC (Least Concern) and DD (Data Deficient)
         # Chains across Recording to Species to ThreatStatus
         return (self.filter(species__threat_status__isnull=False)
+                .exclude(species__threat_status__code__in=['LC', 'DD'])
                 .select_related('species__threat_status', 'user')
                 .order_by('-date_recorded'))
     

@@ -1,9 +1,9 @@
 from django.urls import path
-from . import views
+from .views import HomepageView, SubmitRecordingView, ViewSubmissionsView, FlagAnomalyView
 
 urlpatterns = [
-    path("", views.homepage, name="homepage"),
-    path("submit/", views.submit_recording, name="submit_recording"),
-    path("submissions/", views.view_submissions, name="view_submissions"),
-    path("flag/<int:recording_id>/", views.flag_anomaly, name="flag_anomaly"),
+    path("", HomepageView.as_view(), name="homepage"),
+    path("submit/", SubmitRecordingView.as_view(), name="submit_recording"),
+    path("submissions/", ViewSubmissionsView.as_view(), name="view_submissions"),
+    path("flag/<int:recording_id>/", FlagAnomalyView.as_view(), name="flag_anomaly"),
 ]

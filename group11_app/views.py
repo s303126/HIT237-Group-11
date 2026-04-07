@@ -1,37 +1,42 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from .models import Recording, Anomaly
 from .forms import RecordingForm
 
-def homepage(request):
-    return render(request, "index.html")
+class HomepageView(TemplateView):
+    template_name = "index.html"
 
-def submit_recording(request):
-    if request.method == "POST":
-        form = RecordingForm(request.POST, request.FILES)
-        if form.is_valid():
-            recording = form.save(commit=False)
-            recording.user = request.user
-            recording.save()
-            return redirect("view_submissions")
-    else:
-        form = RecordingForm()
-    return render(request, "submitrecording.html", {"form": form})
+class SubmitRecordingView(CreateView):
+    model = Recording
+    form_class = RecordingForm
+    template_name = "submitrecording.html"
+    success_url = reverse_lazy("view_submissions")
 
-def view_submissions(request):
-    recordings = Recording.objects.order_by("-date_recorded")
-    return render(request, "recentrecordings.html", {"recordings": recordings})
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            form.instance.user = self.request.user
+        else:
+            # Assign a default user (e.g., a "guest" account)
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            guest_user = User.objects.get(username="guest")
+            form.instance.user = guest_user
+        return super().form_valid(form)
 
-def flag_anomaly(request, recording_id):
-    recording = get_object_or_404(Recording, id=recording_id)
-    if request.method == "POST":
-        reason = request.POST.get("reason", "other")
-        description = request.POST.get("description", "")
-        Anomaly.objects.create(
-            recording=recording,
-            flagged_by=request.user,
-            reason=reason,
-            description=description
-        )
-        recording.flag(reason)
-        return redirect("view_submissions")
-    return render(request, "flag_anomaly.html", {"recording": recording})
+class ViewSubmissionsView(ListView):
+    model = Recording
+    template_name = "recentrecordings.html"
+    context_object_name = "recordings"
+    ordering = ["-date_recorded"]
+
+class FlagAnomalyView(CreateView):
+    model = Anomaly
+    fields = ["reason", "description"]
+    template_name = "flag_anomaly.html"
+    success_url = reverse_lazy("view_submissions")
+
+    def form_valid(self, form):
+        form.instance.recording_id = self.kwargs["recording_id"]
+        form.instance.flagged_by = self.request.user
+        return super().form_valid(form)

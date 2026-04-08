@@ -79,7 +79,7 @@ class SpeciesManager(models.Manager):
                 self.filter(scientific_name__icontains=query))
 
 class Species(models.Model):
-    object = SpeciesManager()
+    objects = SpeciesManager()
     common_name = models.CharField(max_length=100)
     scientific_name = models.CharField(max_length=100, unique=True)
     fauna_group = models.ForeignKey(FaunaGroup, on_delete=models.PROTECT)
@@ -204,7 +204,8 @@ class RecordingManager(models.Manager):
     def get_top_locations(self, limit=3, threatened_only=False):
         # Returns the top 3 locations with the most recordings
         # threatened_only parameter filters to only show threatened species top locations
-        qs = self.values('location_name').annotate(recording_count=Count('id'))
+        def get_top_locations(self, limit=3, threatened_only=False):
+        qs = self.annotate(recording_count=Count('id'))
         if threatened_only:
             qs = qs.filter(species__threat_status__isnull=False)
         return qs.order_by('-recording_count')[:limit]

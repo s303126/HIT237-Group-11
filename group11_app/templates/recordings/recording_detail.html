@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Recording Detail - Listening to NT's Disappearing Animals{% endblock %}
+
+{% block content %}
+<section class="recording-detail">
+  <h2>Recording Detail</h2>
+  <p>
+    View the full details of an individual species recording, including submission data,
+    location, confidence score, and anomaly status.
+  </p>
+  
+<!--
+Recording detail card:
+Displays the core fields of a single Recording instance, including linked
+species information, user submission data, location metadata, confidence score,
+and notes.
+-->
+  <div class="detail-card">
+    <h3>Northern Quoll</h3>
+    <p><strong>Scientific Name:</strong> Dasyurus hallucatus</p>
+    <p><strong>Submitted By:</strong> citizen_scientist_01</p>
+    <p><strong>Date Recorded:</strong> 25 March 2026, 6:45 PM</p>
+    <p><strong>Date Submitted:</strong> 25 March 2026, 7:02 PM</p>
+    <p><strong>Location Name:</strong> Kakadu National Park</p>
+    <p><strong>Latitude:</strong> -12.720000</p>
+    <p><strong>Longitude:</strong> 132.530000</p>
+    <p><strong>Confidence Score:</strong> 0.91</p>
+    <p><strong>Notes:</strong> Clear night-time call recording collected near woodland edge.</p>
+    <p><strong>Status:</strong> Not flagged</p>
+  </div>
+
+  <section class="audio-preview">
+    <h3>Audio Recording</h3>
+    <p>Audio playback or file link will appear here when backend integration is completed.</p>
+  </section>
+
+  <section class="anomaly-section">
+    <h3>Anomaly Reports</h3>
+    <p>No anomaly reports currently linked to this recording.</p>
+
+    <div class="button-group">
+      <a class="button" href="{% url 'anomaly_create' 1 %}">Flag Anomaly</a>
+      <a class="button" href="{% url 'recording_list' %}">Back to Timeline</a>
+    </div>
+  </section>
+
+  <!-- Actual dynamic code when backend is implemented:
+
+  <div class="detail-card">
+    <h3>{{ recording.species.common_name }}</h3>
+    <p><strong>Scientific Name:</strong> {{ recording.species.scientific_name }}</p>
+    <p><strong>Submitted By:</strong> {{ recording.user.username }}</p>
+    <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
+    <p><strong>Date Submitted:</strong> {{ recording.date_submitted }}</p>
+    <p><strong>Location Name:</strong> {{ recording.location_name }}</p>
+    <p><strong>Latitude:</strong> {{ recording.latitude }}</p>
+    <p><strong>Longitude:</strong> {{ recording.longitude }}</p>
+    <p><strong>Confidence Score:</strong> {{ recording.confidence_score }}</p>
+    <p><strong>Notes:</strong> {{ recording.notes }}</p>
+
+    {% if recording.is_anomaly %}
+      <p><strong>Status:</strong> Flagged as anomaly</p>
+    {% else %}
+      <p><strong>Status:</strong> Not flagged</p>
+    {% endif %}
+  </div>
+
+  <section class="audio-preview">
+    <h3>Audio Recording</h3>
+    {% if recording.audio_file %}
+      <audio controls>
+        <source src="{{ recording.audio_file.url }}">
+        Your browser does not support the audio element.
+      </audio>
+    {% else %}
+      <p>No audio file available.</p>
+    {% endif %}
+  </section>
+
+  <section class="anomaly-section">
+    <h3>Anomaly Reports</h3>
+
+    {% if anomalies %}
+      {% for anomaly in anomalies %}
+        <div class="record-card">
+          <p><strong>Reason:</strong> {{ anomaly.get_reason_display }}</p>
+          <p><strong>Flagged By:</strong> {{ anomaly.flagged_by }}</p>
+          <p><strong>Flagged At:</strong> {{ anomaly.flagged_at }}</p>
+          <p><strong>Description:</strong> {{ anomaly.description }}</p>
+          <p><strong>Resolved:</strong> {{ anomaly.resolved }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No anomaly reports currently linked to this recording.</p>
+    {% endif %}
+
+    <div class="button-group">
+      <a class="button" href="{% url 'anomaly_create' recording.pk %}">Flag Anomaly</a>
+      <a class="button" href="{% url 'recording_list' %}">Back to Timeline</a>
+    </div>
+  </section>
+  -->
+</section>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Species Detail - Listening to NT's Disappearing Animals{% endblock %}
+
+{% block content %}
+<section class="species-detail">
+  <h2>Species Detail</h2>
+  <p>
+    View detailed information about a species, including its conservation status,
+    classification, and recent recording activity.
+  </p>
+
+  <div class="detail-card">
+    <h3>Northern Quoll</h3>
+    <p><strong>Scientific Name:</strong> Dasyurus hallucatus</p>
+    <p><strong>Fauna Group:</strong> Mammals</p>
+    <p><strong>Threat Status:</strong> Endangered</p>
+    <p><strong>Native:</strong> Yes</p>
+    <p><strong>Introduced:</strong> No</p>
+    <p>
+      The Northern Quoll is a carnivorous marsupial native to northern Australia.
+      It has experienced major population decline due to habitat loss, predation,
+      and poisoning from invasive cane toads.
+    </p>
+  </div>
+
+  <section class="recent-recordings">
+    <h3>Recent Recordings</h3>
+
+    <div class="record-card">
+      <p><strong>Date Recorded:</strong> 25 March 2026</p>
+      <p><strong>Location:</strong> Kakadu National Park</p>
+      <p><strong>Confidence Score:</strong> 0.91</p>
+    </div>
+
+    <div class="record-card">
+      <p><strong>Date Recorded:</strong> 22 March 2026</p>
+      <p><strong>Location:</strong> Arnhem Land</p>
+      <p><strong>Confidence Score:</strong> 0.84</p>
+    </div>
+  </section>
+
+  <section class="species-summary">
+    <h3>Monitoring Summary</h3>
+    <p><strong>Total Recordings:</strong> 12</p>
+    <p><strong>Average Confidence Score:</strong> 0.87</p>
+    <p><strong>Flagged Recordings:</strong> 1</p>
+  </section>
+
+  <div class="button-group">
+    <a class="button" href="{% url 'species_list' %}">Back to Species List</a>
+    <a class="button" href="{% url 'recording_list' %}">View Recordings</a>
+  </div>
+</section>
+
+<!--
+FUTURE DYNAMIC VERSION:
+
+<div class="detail-card">
+  <h3>{{ species.common_name }}</h3>
+  <p><strong>Scientific Name:</strong> {{ species.scientific_name }}</p>
+  <p><strong>Fauna Group:</strong> {{ species.fauna_group.name }}</p>
+
+  {% if species.threat_status %}
+    <p><strong>Threat Status:</strong> {{ species.threat_status.label }}</p>
+  {% else %}
+    <p><strong>Threat Status:</strong> Not assigned</p>
+  {% endif %}
+
+  <p><strong>Native:</strong> {% if species.is_native %}Yes{% else %}No{% endif %}</p>
+  <p><strong>Introduced:</strong> {% if species.is_introduced %}Yes{% else %}No{% endif %}</p>
+  <p>{{ species.description }}</p>
+</div>
+
+<section class="recent-recordings">
+  <h3>Recent Recordings</h3>
+
+  {% for recording in recent_recordings %}
+    <div class="record-card">
+      <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
+      <p><strong>Location:</strong> {{ recording.location_name }}</p>
+      <p><strong>Confidence Score:</strong> {{ recording.confidence_score }}</p>
+      <a class="button" href="{% url 'recording_detail' recording.pk %}">View Recording</a>
+    </div>
+  {% empty %}
+    <p>No recent recordings available for this species.</p>
+  {% endfor %}
+</section>
+
+<section class="species-summary">
+  <h3>Monitoring Summary</h3>
+  <p><strong>Total Recordings:</strong> {{ species.get_recording_count }}</p>
+  <p><strong>Average Confidence Score:</strong> {{ species.get_average_confidence }}</p>
+  <p><strong>Flagged Recordings:</strong> {{ flagged_recordings|length }}</p>
+</section>
+-->
+{% endblock %}

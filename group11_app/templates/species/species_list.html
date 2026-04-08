@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Species - Listening to NT's Disappearing Animals{% endblock %}
+
+{% block content %}
+<section>
+  <h2>Species Directory</h2>
+  <p>
+    Browse species recorded in the system, including their scientific names,
+    fauna groups, and conservation status.
+  </p>
+
+  <div class="card-container">
+    <article class="card">
+      <h3>Northern Quoll</h3>
+      <p><strong>Scientific Name:</strong> Dasyurus hallucatus</p>
+      <p><strong>Fauna Group:</strong> Mammals</p>
+      <p><strong>Threat Status:</strong> Endangered</p>
+      <p><strong>Native:</strong> Yes</p>
+      <p><strong>Introduced:</strong> No</p>
+      <p>
+        A carnivorous marsupial native to northern Australia, threatened by habitat loss,
+        cane toads, and predation.
+      </p>
+
+      <div class="button-group">
+        <a class="button" href="#">View Details</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>Gouldian Finch</h3>
+      <p><strong>Scientific Name:</strong> Erythrura gouldiae</p>
+      <p><strong>Fauna Group:</strong> Birds</p>
+      <p><strong>Threat Status:</strong> Endangered</p>
+      <p><strong>Native:</strong> Yes</p>
+      <p><strong>Introduced:</strong> No</p>
+      <p>
+        A brightly coloured finch found in northern Australia, known for its striking plumage
+        and declining wild populations.
+      </p>
+
+      <div class="button-group">
+        <a class="button" href="#">View Details</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>Arnhem Leaf-nosed Bat</h3>
+      <p><strong>Scientific Name:</strong> Hipposideros inornatus</p>
+      <p><strong>Fauna Group:</strong> Mammals</p>
+      <p><strong>Threat Status:</strong> Vulnerable</p>
+      <p><strong>Native:</strong> Yes</p>
+      <p><strong>Introduced:</strong> No</p>
+      <p>
+        A bat species associated with caves and rocky habitats in the Top End, sensitive to
+        disturbance and habitat change.
+      </p>
+
+      <div class="button-group">
+        <a class="button" href="#">View Details</a>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}
+
+{% comment %}
+
+Dynamic version when backend is implemented.
+
+{% extends "base.html" %}
+
+{% block title %}Species - Listening to NT's Disappearing Animals{% endblock %}
+
+{% block content %}
+
+{% for species in species_list %}
+  <article class="card">
+    <h3>{{ species.common_name }}</h3>
+    <p><strong>Scientific Name:</strong> {{ species.scientific_name }}</p>
+    <p><strong>Fauna Group:</strong> {{ species.fauna_group.name }}</p>
+
+    {% if species.threat_status %}
+      <p><strong>Threat Status:</strong> {{ species.threat_status.label }}</p>
+    {% else %}
+      <p><strong>Threat Status:</strong> Not assigned</p>
+    {% endif %}
+
+    <p><strong>Native:</strong> {% if species.is_native %}Yes{% else %}No{% endif %}</p>
+    <p><strong>Introduced:</strong> {% if species.is_introduced %}Yes{% else %}No{% endif %}</p>
+    <p>{{ species.description }}</p>
+
+    <div class="button-group">
+      <a class="button" href="{% url 'species_detail' species.pk %}">View Details</a>
+    </div>
+  </article>
+{% empty %}
+  <p>No species available.</p>
+{% endfor %}
+
+{% endblock %}
+
+{% endcomment %}

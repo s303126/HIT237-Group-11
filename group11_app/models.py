@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 from django.db.models import Count, Avg
 from django.utils import timezone 
 
@@ -114,13 +114,12 @@ class Species(models.Model):
         """Returns all recordings for this species flagged as anomalies."""
         return self.recording_set.filter(is_anomaly=True)
 
-class User(AbstractUser):
+class User(User):
     ROLE_TYPES = [
         ('researcher', 'Researcher'), 
         ('citizen_scientist', 'Citizen Scientist')
     ]
     role = models.CharField(max_length=20, default='citizen_scientist', choices=ROLE_TYPES)
-    bio = models.TextField(blank=True)
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='custom_user_set',
@@ -204,7 +203,6 @@ class RecordingManager(models.Manager):
     def get_top_locations(self, limit=3, threatened_only=False):
         # Returns the top 3 locations with the most recordings
         # threatened_only parameter filters to only show threatened species top locations
-        def get_top_locations(self, limit=3, threatened_only=False):
         qs = self.annotate(recording_count=Count('id'))
         if threatened_only:
             qs = qs.filter(species__threat_status__isnull=False)
@@ -297,7 +295,6 @@ class Anomaly(models.Model):
     flagged_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='flagged_anomalies')
     flagged_at = models.DateTimeField(auto_now_add=True)
     reason = models.CharField(max_length=20, choices=REASON_CHOICES)
-    description = models.TextField(blank=True)
     resolved = models.BooleanField(default=False)
     resolved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='resolved_anomalies')
     resolved_at = models.DateTimeField(null=True, blank=True)

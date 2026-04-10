@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db.models import Count, Avg
 from django.utils import timezone 
 
@@ -114,18 +114,18 @@ class Species(models.Model):
         """Returns all recordings for this species flagged as anomalies."""
         return self.recording_set.filter(is_anomaly=True)
 
-class User(User):
+class User(AbstractUser):
     ROLE_TYPES = [
         ('researcher', 'Researcher'), 
         ('citizen_scientist', 'Citizen Scientist')
     ]
     role = models.CharField(max_length=20, default='citizen_scientist', choices=ROLE_TYPES)
-    user_group = models.ManyToManyField(
+    groups = models.ManyToManyField(
         'auth.Group',
         related_name='custom_user_set',
         blank=True
     )
-    user_permission = models.ManyToManyField(
+    user_permissions = models.ManyToManyField(
         'auth.Permission',
         related_name='custom_user_set',
         blank=True

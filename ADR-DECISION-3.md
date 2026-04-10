@@ -2,7 +2,7 @@
 
 **Author:** Melanie Bardoux
 
-**Status:** Proposed 
+**Status:** Accepted
 
 **AI Usage:**  
 Redundancy identified by Melanie Bardoux while reviewing models in preparation for writing QuerySet managers. AI assistant used to help explore alternatives and consequences.

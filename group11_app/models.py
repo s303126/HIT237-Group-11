@@ -120,12 +120,12 @@ class User(User):
         ('citizen_scientist', 'Citizen Scientist')
     ]
     role = models.CharField(max_length=20, default='citizen_scientist', choices=ROLE_TYPES)
-    groups = models.ManyToManyField(
+    user_group = models.ManyToManyField(
         'auth.Group',
         related_name='custom_user_set',
         blank=True
     )
-    user_permissions = models.ManyToManyField(
+    user_permission = models.ManyToManyField(
         'auth.Permission',
         related_name='custom_user_set',
         blank=True

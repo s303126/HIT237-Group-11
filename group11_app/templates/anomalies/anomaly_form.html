@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Flag Anomaly - Listening to NT's Disappearing Animals{% endblock %}
+
+{% block content %}
+
+<form method="post">
+  {% csrf_token %}
+
+  {{ form.reason.label_tag }}
+  {{ form.reason }}
+
+  {{ form.description.label_tag }}
+  {{ form.description }}
+
+  <button type="submit">Submit Anomaly Report</button>
+</form>
+
+<div class="record-summary">
+  <h3>Recording Summary</h3>
+  <p><strong>Species:</strong> {{ recording.species.common_name }}</p>
+  <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
+  <p><strong>Location:</strong> {{ recording.location_name }}</p>
+</div>
+{% endblock %}

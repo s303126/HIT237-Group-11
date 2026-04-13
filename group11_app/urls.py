@@ -1,9 +1,21 @@
 from django.urls import path
-from .views import HomepageView, SubmitRecordingView, ViewSubmissionsView, FlagAnomalyView
+from .views import AnomalyListView, ViewSubmissionsView
+from .views import HomepageView
+from .views import RecordingCreateView
+from .views import SpeciesListView
+from .views import SpeciesDetailView
+from .views import RecordingDetailView
+from .views import AnomalyCreateView
+from .views import AnomalyResolveView
 
 urlpatterns = [
-    path("", HomepageView.as_view(), name="homepage"),
-    path("submit/", SubmitRecordingView.as_view(), name="submit_recording"),
-    path("submissions/", ViewSubmissionsView.as_view(), name="view_submissions"),
-    path("flag/<int:recording_id>/", FlagAnomalyView.as_view(), name="flag_anomaly"),
+    path("recordings/", ViewSubmissionsView.as_view(), name="recording_list"),
+    path("species/", SpeciesListView.as_view(), name="species_list"),
+    path("species/<int:pk>/", SpeciesDetailView.as_view(), name="species_detail"),
+    path("recordings/create/", RecordingCreateView.as_view(), name="recording_create"),
+    path("recordings/<int:pk>/", RecordingDetailView.as_view(), name="recording_detail"),   
+    path("anomalies/", AnomalyListView.as_view(), name="anomaly_list"),
+    path("anomalies/create/<int:pk>/", AnomalyCreateView.as_view(), name="anomaly_create"),
+    path("anomalies/resolve/<int:pk>/", AnomalyResolveView.as_view(), name="anomaly_resolve"),
+    path("", HomepageView.as_view(), name="home"),
 ]

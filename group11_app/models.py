@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Count, Avg
+from django.utils import timezone 
 
 # Create your models here.
 
@@ -19,8 +21,19 @@ class ThreatStatus(models.Model):
     def get_threatened(cls):
         """Returns all statuses considered actively threatened."""
         return cls.objects.exclude(code__in=['LC', 'DD'])
+    
+class FaunaGroupManager(models.Manager):
+    def get_with_species_counts(self):
+        # Returns all fauna groups annotated with their total number of species
+        return self.annotate(species_count=Count('species'))
+    
+    def get_with_recording_counts(self):
+        # Returns all fauna groups annotated with their total number of recordings
+        return (self.annotate(recording_count=Count('species__recording'))
+                    .order_by('-recording_count'))
 
 class FaunaGroup(models.Model):
+    objects = FaunaGroupManager()
     name = models.CharField(max_length=100, unique=True)
     icon = models.ImageField(upload_to='icon/')
     
@@ -37,14 +50,36 @@ class FaunaGroup(models.Model):
 
     def get_recent_recordings(self, days=30):
         """Returns recordings for any species in this group within the last N days."""
-        from django.utils import timezone
         cutoff = timezone.now() - timezone.timedelta(days=days)
         return Recording.objects.filter(
-            species__group=self,
+            species__fauna_group=self,
             date_recorded__gte=cutoff
         )
+    
+class SpeciesManager(models.Manager):
+    def get_threatened(self):
+        # Returns all threatened species with related threat status and fauna group
+        return (self.filter(threat_status__isnull=False)
+                .select_related('threat_status', 'fauna_group'))
+    
+    def get_native(self):
+        # Returns all native species
+        return (self.filter(is_native=True)
+                .select_related('fauna_group'))
+    
+    def get_with_recording_counts(self):
+        # Returns all species annotated with their total number of recordings
+        return (self.annotate(recording_count=Count('recording'))
+                .select_related('threat_status', 'fauna_group')
+                .order_by('-recording_count'))
+    
+    def search_by_name(self, query):
+        # Returns species matching a common or scientific name search
+        return (self.filter(common_name__icontains=query) |
+                self.filter(scientific_name__icontains=query))
 
 class Species(models.Model):
+    objects = SpeciesManager()
     common_name = models.CharField(max_length=100)
     scientific_name = models.CharField(max_length=100, unique=True)
     fauna_group = models.ForeignKey(FaunaGroup, on_delete=models.PROTECT)
@@ -72,7 +107,6 @@ class Species(models.Model):
 
     def get_recent_recordings(self, days=30):
         """Returns recordings for this species within the last N days."""
-        from django.utils import timezone
         cutoff = timezone.now() - timezone.timedelta(days=days)
         return self.recording_set.filter(date_recorded__gte=cutoff)
 
@@ -86,7 +120,16 @@ class User(AbstractUser):
         ('citizen_scientist', 'Citizen Scientist')
     ]
     role = models.CharField(max_length=20, default='citizen_scientist', choices=ROLE_TYPES)
-    bio = models.TextField(blank=True)
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='custom_user_set',
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='custom_user_set',
+        blank=True
+    )
     
     def __str__(self):
         return f"{self.username} ({self.role})"
@@ -101,15 +144,80 @@ class User(AbstractUser):
 
     def get_recent_submissions(self, days=30):
         """Returns recordings this user submitted in the last N days."""
-        from django.utils import timezone
         cutoff = timezone.now() - timezone.timedelta(days=days)
         return self.recording_set.filter(date_submitted__gte=cutoff)
 
     def get_flagged_submissions(self):
         """Returns this user's recordings that have been flagged as anomalies."""
         return self.recording_set.filter(is_anomaly=True)
+    
+class RecordingManager(models.Manager):
+    def get_timeline(self):
+        # Returns all recordings ordered newest first, with related
+        #species, user and anomalies pre-fetched to avoid extra database queries
+        return (self.select_related('species', 'user')
+                .prefetch_related('anomaly_set')
+                .order_by('-date_recorded'))
+    
+    def get_recent(self, days=7):
+        # Returns all recordings submitted within the last 7 days
+        # 'days' parameter can be adjusted as needed
+        cutoff = timezone.now() - timezone.timedelta(days=days)
+        return (self.select_related('species', 'user')
+                .filter(date_recorded__gte=cutoff)
+                .order_by('-date_recorded'))
+    
+    def get_by_species(self, species):
+        # Returns all recordings for a given species, ordered newest to oldest
+        return (self.filter(species=species)
+               .select_related('user')
+               .order_by('-date_recorded'))
+    
+    def get_by_user(self, user):
+        # Returns all recordings from a specific user, ordered newest to oldest
+        return (self.filter(user=user)
+               .select_related('species')
+               .order_by('-date_recorded'))
+    
+    def get_with_anomaly_count(self):
+        # Returns all recordings with a count of anomalies (flags) for each recording
+        return (self.annotate(anomaly_count=Count('anomaly'))
+                .select_related('species', 'user')
+                .order_by('-date_recorded'))
+    
+    def get_by_threatened_species(self):
+        # Returns all recordings of threatened species only
+        # Excludes LC (Least Concern) and DD (Data Deficient)
+        # Chains across Recording to Species to ThreatStatus
+        return (self.filter(species__threat_status__isnull=False)
+                .exclude(species__threat_status__code__in=['LC', 'DD'])
+                .select_related('species__threat_status', 'user')
+                .order_by('-date_recorded'))
+    
+    def get_statistics(self):
+        # Returns total number of recordings and average confidence score
+        return self.aggregate(
+                total_recordings=Count('id'),
+                avg_confidence=Avg('confidence_score'))
+    
+    def get_top_locations(self, limit=3, threatened_only=False):
+        # Returns the top 3 locations with the most recordings
+        # threatened_only parameter filters to only show threatened species top locations
+        qs = self.annotate(recording_count=Count('id'))
+        if threatened_only:
+            qs = qs.filter(species__threat_status__isnull=False)
+        return qs.order_by('-recording_count')[:limit]
+
+    def get_users_with_high_flags(self):
+        # Returns users who have had 3 or more recordings flagged
+        from django.db.models import Count
+        return (self.values('user__username')
+                .annotate(flagged_count=Count('anomaly'))
+                .filter(flagged_count__gte=3)
+                .order_by('-flagged_count'))
 
 class Recording(models.Model):
+    objects = RecordingManager()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     species = models.ForeignKey(Species, on_delete=models.PROTECT)
     audio_file = models.FileField(upload_to='recordings/')
@@ -151,20 +259,29 @@ class Recording(models.Model):
         return self.anomaly_set.filter(resolved=False).exists()
 
     @classmethod
-    def get_timeline(cls, days=30):
-        """Returns recent recordings ordered newest-first for the timeline view."""
-        from django.utils import timezone
-        cutoff = timezone.now() - timezone.timedelta(days=days)
-        return cls.objects.filter(
-            date_recorded__gte=cutoff
-        ).select_related('species', 'user').order_by('-date_recorded')
-
-    @classmethod
     def get_flagged(cls):
         """Returns all flagged recordings with related data prefetched."""
         return cls.objects.filter(
             is_anomaly=True
         ).select_related('species', 'user')
+    
+
+class AnomalyManager(models.Manager):
+    def get_unresolved(self):
+        # Returns all unresolved anomalies, newest first
+        return (self.filter(resolved=False)
+                .select_related('recording', 'flagged_by')
+                .order_by('-flagged_at'))
+    
+    def get_by_reason(self, reason):
+        # Returns all anomalies filtered by reason type
+        return (self.filter(reason=reason)
+                .select_related('recording', 'flagged_by'))
+    
+    def get_for_species(self, species):
+        # Returns all anomalies based on species
+        return (self.filter(recording__species=species)
+                .select_related('recording', 'flagged_by'))
     
 class Anomaly(models.Model):
     REASON_CHOICES = [
@@ -178,10 +295,10 @@ class Anomaly(models.Model):
     flagged_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='flagged_anomalies')
     flagged_at = models.DateTimeField(auto_now_add=True)
     reason = models.CharField(max_length=20, choices=REASON_CHOICES)
-    description = models.TextField(blank=True)
     resolved = models.BooleanField(default=False)
     resolved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='resolved_anomalies')
     resolved_at = models.DateTimeField(null=True, blank=True)
+    objects = AnomalyManager()
     
     def __str__(self):
         return f"Anomaly on Recording #{self.recording_id} — {self.reason}"
@@ -192,24 +309,7 @@ class Anomaly(models.Model):
 
     def resolve(self, user):
         """Marks this anomaly as resolved by the given user."""
-        from django.utils import timezone
         self.resolved = True
         self.resolved_by = user
         self.resolved_at = timezone.now()
         self.save()
-
-    @classmethod
-    def get_unresolved(cls):
-        """Returns all unresolved anomalies, newest first."""
-        return cls.objects.filter(
-            resolved=False
-        ).select_related('recording', 'flagged_by').order_by('-flagged_at')
-
-    @classmethod
-    def get_for_species(cls, species):
-        """Returns all anomalies linked to recordings of a given species."""
-        return cls.objects.filter(
-            recording__species=species
-        ).select_related('recording', 'flagged_by')
-    
-    

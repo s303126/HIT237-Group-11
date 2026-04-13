@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Listening to NT's Disappearing Animals{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h2>Track Species Calls and Protect NT Biodiversity</h2>
+  <p>
+    This platform helps researchers and citizen scientists record, review, and monitor
+    species call observations across the Northern Territory. Users can submit recordings,
+    explore recent activity, and flag anomalies for further review.
+  </p>
+
+  <div class="button-group">
+    <a class="button" href="{% url 'recording_create' %}">Submit a Recording</a>
+    <a class="button" href="{% url 'recording_list' %}">View Recent Recordings</a>
+  </div>
+</section>
+
+<section class="overview">
+  <h2>What This App Does</h2>
+
+  <div class="card-container">
+    <article class="card">
+      <h3>Log Recordings</h3>
+      <p>
+        Submit species call recordings with date, location, confidence score, and notes
+        to support biodiversity monitoring.
+      </p>
+    </article>
+
+    <article class="card">
+      <h3>View Timeline</h3>
+      <p>
+        Browse recent submissions in a timeline-style view to track species activity
+        and identify patterns over time.
+      </p>
+    </article>
+
+    <article class="card">
+      <h3>Flag Anomalies</h3>
+      <p>
+        Report unusual or suspicious records, such as poor audio quality, incorrect
+        species identification, or duplicate entries.
+      </p>
+    </article>
+  </div>
+</section>
+
+<section class="recent-submissions">
+  <h2>Recent Submissions</h2>
+
+  <div class="submission-card"> # Note these are hardcoded examples for the webpage until backend functionality is implemented.
+    <h3>Northern Quoll</h3>
+    <p><strong>Date:</strong> 25 March 2026</p>
+    <p><strong>Location:</strong> Kakadu National Park</p>
+    <p><strong>Confidence Score:</strong> 0.91</p>
+  </div>
+
+  <div class="submission-card">
+    <h3>Gouldian Finch</h3>
+    <p><strong>Date:</strong> 24 March 2026</p>
+    <p><strong>Location:</strong> Arnhem Land</p>
+    <p><strong>Confidence Score:</strong> 0.86</p>
+  </div>
+
+  <div class="submission-card">
+    <h3>Arnhem Leaf-nosed Bat</h3>
+    <p><strong>Date:</strong> 23 March 2026</p>
+    <p><strong>Location:</strong> Nitmiluk Region</p>
+    <p><strong>Confidence Score:</strong> 0.78</p>
+  </div>
+</section>
+
+<section class="project-summary">
+  <h2>Why It Matters</h2>
+  <p>
+    Many Northern Territory species face growing environmental pressure. A structured
+    recording system can help researchers and communities monitor biodiversity,
+    identify unusual observations, and support conservation efforts with better data.
+  </p>
+</section>
+{% endblock %}

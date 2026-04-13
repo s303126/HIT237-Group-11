@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'group11_app',
 ]
-AUTH_USER_MODEL = "group11_app.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

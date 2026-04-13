@@ -7,9 +7,6 @@ This project is a Django-based web application designed to support biodiversity 
 - `index.html`, `submit.html`, `timeline.html`  
   Initial frontend layout prototypes
 
-- `flowchart.md`  
-  Contains basic flowchart for the website
-
 - `docs/wireframes/`  
   Basic page layouts demonstrating structure and content placement
 

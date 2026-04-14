@@ -10,8 +10,11 @@ class ThreatStatus(models.Model):
     label = models.CharField(max_length=50)
     description = models.TextField(max_length=500, blank=True)
     
+    class Meta:
+            verbose_name_plural = 'Threat Status'
+
     def __str__(self):
-        return self.label[:25]
+        return self.label
 
     def is_critical(self):
         """Returns True if this is the highest threat level."""
@@ -88,6 +91,9 @@ class Species(models.Model):
     is_introduced = models.BooleanField(default=False)
     description = models.TextField(max_length=500, blank=True)
     
+    class Meta:
+        verbose_name_plural = 'Species'
+
     def __str__(self):
         return self.common_name[:25]
     
@@ -278,6 +284,9 @@ class Anomaly(models.Model):
     resolved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='resolved_anomalies')
     resolved_at = models.DateTimeField(null=True, blank=True)
     
+    class Meta:
+        verbose_name_plural = 'Anomalies'
+
     def __str__(self):
         return f"Anomaly on Recording #{self.recording_id} — {self.reason}"
     

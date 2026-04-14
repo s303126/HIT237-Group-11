@@ -1,0 +1,14 @@
+<h2>Flag Recording as Anomaly</h2>
+<p>{{ recording }}</p>
+<form method="post">
+    {% csrf_token %}
+    <select name="reason">
+        <option value="wrong_species">Wrong Species</option>
+        <option value="poor_quality">Poor Audio Quality</option>
+        <option value="duplicate">Duplicate Entry</option>
+        <option value="location_error">Location Error</option>
+        <option value="other">Other</option>
+    </select>
+    <input type="text" name="description" placeholder="Optional description">
+    <button type="submit">Flag</button>
+</form>

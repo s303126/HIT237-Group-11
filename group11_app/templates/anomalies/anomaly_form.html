@@ -3,48 +3,6 @@
 {% block title %}Flag Anomaly - Listening to NT's Disappearing Animals{% endblock %}
 
 {% block content %}
-<section> <!-- Introductory section to explain the purpose of anomaly reporting forms. -->
-  <h2>Flag Anomaly</h2>
-  <p>
-    Use this form to report a potential issue with a species recording, such as
-    incorrect identification, poor audio quality, or duplicate entries.
-  </p>
-
-<!-- This section displays key details of the selected recording to ensure users know 
-which submission they are flagging an anomaly for. Reinforces relationship between Recording 
-and Anomaly models. -->
-  <div class="record-summary"
-    <h3>Recording Summary</h3> 
-    <p><strong>Species:</strong> Northern Quoll</p>
-    <p><strong>Date Recorded:</strong> 25 March 2026</p>
-    <p><strong>Location:</strong> Kakadu National Park</p>
-  </div>
-
-  <form id="anomalyForm" method="post">
-    <label for="reason">Reason</label>
-    <select id="reason" required>
-      <option value="">-- Select a reason --</option>
-      <option>Incorrect species identification</option>
-      <option>Poor audio quality</option>
-      <option>Duplicate entry</option>
-      <option>Suspicious data</option>
-      <option>Other</option>
-    </select>
-
-    <label for="description">Description</label>
-    <textarea id="description" placeholder="Provide more details about the issue..."></textarea>
-
-    <button type="submit">Submit Anomaly Report</button>
-  </form>
-
-  <div class="button-group">
-    <a class="button" href="#">Back to Recording</a>
-    <a class="button" href="{% url 'recording_list' %}">Back to Timeline</a>
-  </div>
-</section>
-
-<!--
-Dynamic version when backend is implemented.
 
 <form method="post">
   {% csrf_token %}
@@ -64,5 +22,4 @@ Dynamic version when backend is implemented.
   <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
   <p><strong>Location:</strong> {{ recording.location_name }}</p>
 </div>
--->
 {% endblock %}

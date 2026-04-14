@@ -3,63 +3,6 @@
 {% block title %}Anomaly Reports - Listening to NT's Disappearing Animals{% endblock %}
 
 {% block content %}
-<section>
-  <h2>Anomaly Reports</h2>
-  <p>
-    Review anomaly reports submitted for species recordings. These reports may identify
-    incorrect species labels, duplicate entries, poor audio quality, or other issues
-    requiring further investigation.
-  </p>
-
-<!-- Static example cards for a list of reported anomalies. See below for dynamic version
- when backend is implemented. -->
-  <div class="record-card">
-    <h3>Northern Quoll Recording</h3>
-    <p><strong>Reason:</strong> Poor audio quality</p>
-    <p><strong>Flagged By:</strong> citizen_scientist_02</p>
-    <p><strong>Flagged At:</strong> 26 March 2026, 9:15 AM</p>
-    <p><strong>Description:</strong> Background noise makes the call difficult to identify clearly.</p>
-    <p><strong>Status:</strong> Unresolved</p>
-
-    <div class="button-group">
-      <a class="button" href="#">View Recording</a>
-      <a class="button" href="#">Mark as Resolved</a>
-    </div>
-  </div>
-
-  <div class="record-card">
-    <h3>Gouldian Finch Recording</h3>
-    <p><strong>Reason:</strong> Duplicate entry</p>
-    <p><strong>Flagged By:</strong> researcher_01</p>
-    <p><strong>Flagged At:</strong> 25 March 2026, 4:40 PM</p>
-    <p><strong>Description:</strong> This appears to be the same file and location as another submission from the same user.</p>
-    <p><strong>Status:</strong> Unresolved</p>
-
-    <div class="button-group">
-      <a class="button" href="#">View Recording</a>
-      <a class="button" href="#">Mark as Resolved</a>
-    </div>
-  </div>
-
-  <div class="record-card">
-    <h3>Arnhem Leaf-nosed Bat Recording</h3>
-    <p><strong>Reason:</strong> Wrong species</p>
-    <p><strong>Flagged By:</strong> researcher_02</p>
-    <p><strong>Flagged At:</strong> 24 March 2026, 11:10 AM</p>
-    <p><strong>Description:</strong> The audio pattern appears to match a different bat species.</p>
-    <p><strong>Status:</strong> Resolved</p>
-
-<!-- Each anomaly card summarises key moderation fields needed for review - including timestamps, 
- anomaly reason, user reporting, description, and resolution status.-->
-    <div class="button-group"> 
-      <a class="button" href="#">View Recording</a>
-    </div>
-  </div>
-</section>
-
-<!--
-Dynamic version when backend is implemented.
-
 {% for anomaly in anomalies %}
   <div class="record-card">
     <h3>{{ anomaly.recording.species.common_name }} Recording</h3>
@@ -77,12 +20,14 @@ Dynamic version when backend is implemented.
     <div class="button-group">
       <a class="button" href="{% url 'recording_detail' anomaly.recording.pk %}">View Recording</a>
       {% if not anomaly.resolved %}
-        <a class="button" href="#">Mark as Resolved</a>
+        <form method="post" action="{% url 'anomaly_resolve' anomaly.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="button">Mark as Resolved</button>
+        </form>
       {% endif %}
     </div>
   </div>
 {% empty %}
   <p>No anomaly reports available.</p>
 {% endfor %}
--->
 {% endblock %}

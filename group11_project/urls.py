@@ -15,28 +15,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
 from group11_app import views
+from django.urls import path, include
 
 """
 Current URL patterns are for testing template page routing. 
 """
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path("", include("group11_app.urls")),  # include app urls
     # homepage
-    path('', views.home, name='home'),
 
     # recordings
-    path('recordings/', views.recording_list, name='recording_list'),
-    path('recordings/submit/', views.recording_create, name='recording_create'),
-    path('recordings/<int:pk>/', views.recording_detail, name='recording_detail'),
+#    path('recordings/', views.recording_list, name='recording_list'),
+#    path('recordings/submit/', views.recording_create, name='recording_create'),
+#    path('recordings/<int:pk>/', views.recording_detail, name='recording_detail'),
 
     # species
-    path('species/', views.species_list, name='species_list'),
-    path('species/<int:pk>/', views.species_detail, name='species_detail'),
+#    path('species/', views.species_list, name='species_list'),
+#    path('species/<int:pk>/', views.species_detail, name='species_detail'),
 
     # anomalies
-    path('anomalies/', views.anomaly_list, name='anomaly_list'),
-    path('recordings/<int:pk>/flag/', views.anomaly_create, name='anomaly_create'),
+#    path('anomalies/', views.anomaly_list, name='anomaly_list'),
+#    path('recordings/<int:pk>/flag/', views.anomaly_create, name='anomaly_create'),
 ]

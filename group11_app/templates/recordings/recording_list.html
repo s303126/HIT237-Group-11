@@ -1,64 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Recent Recordings - Listening to NT's Disappearing Animals{% endblock %}
+{% block title %}Recent Recordings{% endblock %}
 
 {% block content %}
 <section>
   <h2>Recent Species Recordings</h2>
-  <p>
-    Browse recent submissions from researchers and citizen scientists across the Northern Territory.
-  </p>
-
-
-<!--
-Static placeholders for a list of recordings. This is an extended version of the recording summaries
-shown on the homepage (home.html), with additional details, buttons to view recording details
-or to flag anomalies. The layout is more structured on this page to support browsing and moderation of 
-recent submissions.
--->
-
-  <div class="record-card">
-    <h3>Northern Quoll</h3>
-    <p><strong>Date:</strong> 25 March 2026</p>
-    <p><strong>Location:</strong> Kakadu National Park</p>
-    <p><strong>Confidence:</strong> 0.91</p>
-    <button>View Details</button>
-    <button>Flag Anomaly</button>
-  </div>
-
-  <div class="record-card">
-    <h3>Gouldian Finch</h3>
-    <p><strong>Date:</strong> 24 March 2026</p>
-    <p><strong>Location:</strong> Arnhem Land</p>
-    <p><strong>Confidence:</strong> 0.86</p>
-    <button>View Details</button>
-    <button>Flag Anomaly</button>
-  </div>
-
-  <div class="record-card">
-    <h3>Arnhem Leaf-nosed Bat</h3>
-    <p><strong>Date:</strong> 23 March 2026</p>
-    <p><strong>Location:</strong> Nitmiluk Region</p>
-    <p><strong>Confidence:</strong> 0.78</p>
-    <button>View Details</button>
-    <button>Flag Anomaly</button>
-  </div>
-</section>
-{% endblock %}
-
-{% comment %}
-Dynamic version when backend is implemented:
-
-{% extends "base.html" %}
-
-{% block title %}Recent Recordings - Listening to NT's Disappearing Animals{% endblock %}
-
-{% block content %}
-<section>
-  <h2>Recent Species Recordings</h2>
-  <p>
-    Browse recent submissions from researchers and citizen scientists across the Northern Territory.
-  </p>
+  <p>Browse recent submissions from researchers and citizen scientists.</p>
 
   {% for recording in recordings %}
     <div class="record-card">
@@ -85,7 +32,3 @@ Dynamic version when backend is implemented:
   {% endfor %}
 </section>
 {% endblock %}
-
-{% block content %}
-
-{% endcomment %}

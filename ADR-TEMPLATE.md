@@ -42,6 +42,8 @@ e.g. group11_app/models.py:45–67
 
 **Consequences:**
 Known trade-offs and implications.
+
+
 -->
 
 ---

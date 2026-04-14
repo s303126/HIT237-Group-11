@@ -1,14 +1,32 @@
 from django.contrib import admin
 from .models import User, Species, FaunaGroup, ThreatStatus, Recording, Anomaly
 
-# Basic model registration
-admin.site.register(User)
-admin.site.register(Species)
-admin.site.register(FaunaGroup)
-admin.site.register(ThreatStatus)
-admin.site.register(Recording)
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'role')
+    list_filter = ('role',)
+    search_fields = ('username',)
 
-# Custom Anomaly admin
+@admin.register(ThreatStatus)
+class ThreatStatusAdmin(admin.ModelAdmin):
+    list_display = ('code', 'label', 'description')
+
+@admin.register(FaunaGroup)
+class FaunaGroupAdmin(admin.ModelAdmin):
+    list_display = ('name', 'icon')
+
+@admin.register(Species)
+class SpeciesAdmin(admin.ModelAdmin):
+    list_display = ('common_name', 'scientific_name', 'fauna_group', 'threat_status', 'is_native', 'is_introduced')
+    list_filter = ('fauna_group', 'threat_status', 'is_native', 'is_introduced')
+    search_fields = ('common_name', 'scientific_name')
+
+@admin.register(Recording)
+class RecordingAdmin(admin.ModelAdmin):
+    list_display = ('species', 'user', 'date_recorded', 'location_name', 'confidence_score')
+    list_filter = ('species__fauna_group',)
+    search_fields = ('species__common_name', 'user__username', 'location_name')
+
 @admin.register(Anomaly)
 class AnomalyAdmin(admin.ModelAdmin):
     list_display = ('recording', 'reason', 'flagged_by', 'flagged_at', 'resolved', 'resolved_by', 'resolved_at')

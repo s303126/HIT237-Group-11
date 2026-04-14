@@ -2,7 +2,7 @@
 
 **Author:** Melanie Bardoux
 
-**Status:** Accepted
+**Status:** Superseded (See ADR-13)
 
 **AI Usage:**   
 Claude.ai assistance with drafting the custom AnomalyAdmin configuration
@@ -24,4 +24,4 @@ All models were registered using basic registration to provide immediate admin v
 group11_app/admin.py
 
 **Consequences:**  
-All models became visible in the Django admin panel. Basic registration for most models provides functional usability.
+All models became visible in the Django admin panel. Basic registration for most models provides functional usability. (Superseded in ADR-13)

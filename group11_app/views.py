@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView, CreateView, DetailView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 from .models import Anomaly, Recording, User, Species
 from django.views import View
 from django.shortcuts import get_object_or_404, redirect
@@ -121,3 +121,19 @@ class AnomalyResolveView(View):
 
         anomaly.resolve(user)
         return redirect(reverse_lazy("anomaly_list"))
+    
+class RecordingUpdateView(UpdateView):
+    model = Recording
+    template_name = "recordings/recording_form.html"
+    fields = [
+        "species", "date_recorded", "location_name",
+        "latitude", "longitude", "confidence_score",
+        "audio_file", "notes",
+    ]
+    success_url = reverse_lazy("recording_list")
+
+
+class RecordingDeleteView(DeleteView):
+    model = Recording
+    template_name = "recordings/recording_confirm_delete.html"
+    success_url = reverse_lazy("recording_list")

@@ -7,6 +7,8 @@ from .views import SpeciesDetailView
 from .views import RecordingDetailView
 from .views import AnomalyCreateView
 from .views import AnomalyResolveView
+from .views import RecordingUpdateView
+from .views import RecordingDeleteView
 
 urlpatterns = [
     path("recordings/", ViewSubmissionsView.as_view(), name="recording_list"),
@@ -18,4 +20,6 @@ urlpatterns = [
     path("anomalies/create/<int:pk>/", AnomalyCreateView.as_view(), name="anomaly_create"),
     path("anomalies/resolve/<int:pk>/", AnomalyResolveView.as_view(), name="anomaly_resolve"),
     path("", HomepageView.as_view(), name="home"),
+    path("recordings/<int:pk>/edit/", RecordingUpdateView.as_view(), name="recording_update"),
+    path("recordings/<int:pk>/delete/", RecordingDeleteView.as_view(), name="recording_delete"),
 ]

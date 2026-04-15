@@ -3,29 +3,37 @@
 {% block title %}Species - Listening to NT's Disappearing Animals{% endblock %}
 
 {% block content %}
+<section>
+  <h2>Species Directory</h2>
+  <p>
+    Browse species recorded in the system, including scientific names,
+    fauna groups, and conservation status.
+  </p>
 
-{% for species in species %}
-  <article class="card">
-    <h3>{{ species.common_name }}</h3>
-    <p><strong>Scientific Name:</strong> {{ species.scientific_name }}</p>
-    <p><strong>Fauna Group:</strong> {{ species.fauna_group.name }}</p>
+  <div class="card-container">
+    {% for species in species_list %}
+      <article class="card">
+        <h3>{{ species.common_name }}</h3>
+        <p><strong>Scientific Name:</strong> {{ species.scientific_name }}</p>
+        <p><strong>Fauna Group:</strong> {{ species.fauna_group.name }}</p>
 
-    {% if species.threat_status %}
-      <p><strong>Threat Status:</strong> {{ species.threat_status.label }}</p>
-    {% else %}
-      <p><strong>Threat Status:</strong> Not assigned</p>
-    {% endif %}
+        {% if species.threat_status %}
+          <p><strong>Threat Status:</strong> {{ species.threat_status.label }}</p>
+        {% else %}
+          <p><strong>Threat Status:</strong> Not assigned</p>
+        {% endif %}
 
-    <p><strong>Native:</strong> {% if species.is_native %}Yes{% else %}No{% endif %}</p>
-    <p><strong>Introduced:</strong> {% if species.is_introduced %}Yes{% else %}No{% endif %}</p>
-    <p>{{ species.description }}</p>
+        <p><strong>Native:</strong> {% if species.is_native %}Yes{% else %}No{% endif %}</p>
+        <p><strong>Introduced:</strong> {% if species.is_introduced %}Yes{% else %}No{% endif %}</p>
+        <p>{{ species.description }}</p>
 
-    <div class="button-group">
-      <a class="button" href="{% url 'species_detail' species.pk %}">View Details</a>
-    </div>
-  </article>
-{% empty %}
-  <p>No species available.</p>
-{% endfor %}
-
+        <div class="button-group">
+          <a class="button" href="{% url 'species_detail' species.pk %}">View Details</a>
+        </div>
+      </article>
+    {% empty %}
+      <p>No species available.</p>
+    {% endfor %}
+  </div>
+</section>
 {% endblock %}

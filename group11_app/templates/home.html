@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+<!-- Template inheritance -->
+{% extends "base.html" %} 
 
 {% block title %}Home - Listening to NT's Disappearing Animals{% endblock %}
 
@@ -18,7 +19,7 @@
 </section>
 
 <section class="overview">
-  <h2>What This App Does</h2>
+  <h2>What This App Does</h2> <!-- Summary and overview of app features. -->
 
   <div class="card-container">
     <article class="card">
@@ -47,37 +48,18 @@
   </div>
 </section>
 
+<!-- NOTE: The following section is static examples of what recent submissions might look like. See end of HTML for dynamic code. -->
 <section class="recent-submissions">
   <h2>Recent Submissions</h2>
 
-  <div class="submission-card"> # Note these are hardcoded examples for the webpage until backend functionality is implemented.
-    <h3>Northern Quoll</h3>
-    <p><strong>Date:</strong> 25 March 2026</p>
-    <p><strong>Location:</strong> Kakadu National Park</p>
-    <p><strong>Confidence Score:</strong> 0.91</p>
-  </div>
-
-  <div class="submission-card">
-    <h3>Gouldian Finch</h3>
-    <p><strong>Date:</strong> 24 March 2026</p>
-    <p><strong>Location:</strong> Arnhem Land</p>
-    <p><strong>Confidence Score:</strong> 0.86</p>
-  </div>
-
-  <div class="submission-card">
-    <h3>Arnhem Leaf-nosed Bat</h3>
-    <p><strong>Date:</strong> 23 March 2026</p>
-    <p><strong>Location:</strong> Nitmiluk Region</p>
-    <p><strong>Confidence Score:</strong> 0.78</p>
-  </div>
+  {% for recording in recent_recordings %}
+    <div class="submission-card">
+      <h3>{{ recording.species.common_name }}</h3>
+      <p><strong>Date:</strong> {{ recording.date_recorded }}</p>
+      <p><strong>Location:</strong> {{ recording.location_name }}</p>
+      <p><strong>Confidence Score:</strong> {{ recording.confidence_score }}</p>
+    </div>
+  {% empty %}
+    <p>No recent submissions available.</p>
+  {% endfor %}
 </section>
-
-<section class="project-summary">
-  <h2>Why It Matters</h2>
-  <p>
-    Many Northern Territory species face growing environmental pressure. A structured
-    recording system can help researchers and communities monitor biodiversity,
-    identify unusual observations, and support conservation efforts with better data.
-  </p>
-</section>
-{% endblock %}

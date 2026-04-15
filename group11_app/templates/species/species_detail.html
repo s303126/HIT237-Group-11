@@ -1,37 +1,56 @@
-<div class="detail-card">
-  <h3>{{ species.common_name }}</h3>
-  <p><strong>Scientific Name:</strong> {{ species.scientific_name }}</p>
-  <p><strong>Fauna Group:</strong> {{ species.fauna_group.name }}</p>
+{% extends "base.html" %}
 
-  {% if species.threat_status %}
-    <p><strong>Threat Status:</strong> {{ species.threat_status.label }}</p>
-  {% else %}
-    <p><strong>Threat Status:</strong> Not assigned</p>
-  {% endif %}
+{% block title %}Species Detail - Listening to NT's Disappearing Animals{% endblock %}
 
-  <p><strong>Native:</strong> {% if species.is_native %}Yes{% else %}No{% endif %}</p>
-  <p><strong>Introduced:</strong> {% if species.is_introduced %}Yes{% else %}No{% endif %}</p>
-  <p>{{ species.description }}</p>
-</div>
+{% block content %}
+<section class="species-detail">
+  <h2>Species Detail</h2>
+  <p>
+    View detailed information about a species, including conservation status,
+    classification, and recent recording activity.
+  </p>
 
-<section class="recent-recordings">
-  <h3>Recent Recordings</h3>
+  <div class="detail-card">
+    <h3>{{ species.common_name }}</h3>
+    <p><strong>Scientific Name:</strong> {{ species.scientific_name }}</p>
+    <p><strong>Fauna Group:</strong> {{ species.fauna_group.name }}</p>
 
-  {% for recording in recent_recordings %}
-    <div class="record-card">
-      <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
-      <p><strong>Location:</strong> {{ recording.location_name }}</p>
-      <p><strong>Confidence Score:</strong> {{ recording.confidence_score }}</p>
-      <a class="button" href="{% url 'recording_detail' recording.pk %}">View Recording</a>
-    </div>
-  {% empty %}
-    <p>No recent recordings available for this species.</p>
-  {% endfor %}
+    {% if species.threat_status %}
+      <p><strong>Threat Status:</strong> {{ species.threat_status.label }}</p>
+    {% else %}
+      <p><strong>Threat Status:</strong> Not assigned</p>
+    {% endif %}
+
+    <p><strong>Native:</strong> {% if species.is_native %}Yes{% else %}No{% endif %}</p>
+    <p><strong>Introduced:</strong> {% if species.is_introduced %}Yes{% else %}No{% endif %}</p>
+    <p>{{ species.description }}</p>
+  </div>
+
+  <section class="recent-recordings">
+    <h3>Recent Recordings</h3>
+
+    {% for recording in recent_recordings %}
+      <div class="record-card">
+        <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
+        <p><strong>Location:</strong> {{ recording.location_name }}</p>
+        <p><strong>Confidence Score:</strong> {{ recording.confidence_score }}</p>
+        <a class="button" href="{% url 'recording_detail' recording.pk %}">View Recording</a>
+      </div>
+    {% empty %}
+      <p>No recent recordings available for this species.</p>
+    {% endfor %}
+  </section>
+
+  <section class="species-summary">
+    <h3>Monitoring Summary</h3>
+    <p><strong>Total Recordings:</strong> {{ species.get_recording_count }}</p>
+    <p><strong>Average Confidence Score:</strong> {{ species.get_average_confidence }}</p>
+    <p><strong>Flagged Recordings:</strong> {{ flagged_recordings|length }}</p>
+  </section>
+
+  <div class="button-group">
+    <a class="button" href="{% url 'species_list' %}">Back to Species List</a>
+    <a class="button" href="{% url 'recording_list' %}">View Recordings</a>
+  </div>
 </section>
-
-<section class="species-summary">
-  <h3>Monitoring Summary</h3>
-  <p><strong>Total Recordings:</strong> {{ species.get_recording_count }}</p>
-  <p><strong>Average Confidence Score:</strong> {{ species.get_average_confidence }}</p>
-  <p><strong>Flagged Recordings:</strong> {{ flagged_recordings|length }}</p>
-</section>
+{% endblock %}

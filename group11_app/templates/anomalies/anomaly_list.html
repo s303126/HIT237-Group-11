@@ -3,31 +3,38 @@
 {% block title %}Anomaly Reports - Listening to NT's Disappearing Animals{% endblock %}
 
 {% block content %}
-{% for anomaly in anomalies %}
-  <div class="record-card">
-    <h3>{{ anomaly.recording.species.common_name }} Recording</h3>
-    <p><strong>Reason:</strong> {{ anomaly.get_reason_display }}</p>
-    <p><strong>Flagged By:</strong> {{ anomaly.flagged_by }}</p>
-    <p><strong>Flagged At:</strong> {{ anomaly.flagged_at }}</p>
-    <p><strong>Description:</strong> {{ anomaly.description }}</p>
+<section>
+  <h2>Anomaly Reports</h2>
+  <p>
+    Review unresolved anomaly reports linked to submitted recordings.
+  </p>
 
-    {% if anomaly.resolved %}
-      <p><strong>Status:</strong> Resolved</p>
-    {% else %}
-      <p><strong>Status:</strong> Unresolved</p>
-    {% endif %}
+  {% for anomaly in anomalies %}
+    <div class="record-card">
+      <h3>{{ anomaly.recording.species.common_name }} Recording</h3>
+      <p><strong>Reason:</strong> {{ anomaly.get_reason_display }}</p>
+      <p><strong>Flagged By:</strong> {{ anomaly.flagged_by }}</p>
+      <p><strong>Flagged At:</strong> {{ anomaly.flagged_at }}</p>
 
-    <div class="button-group">
-      <a class="button" href="{% url 'recording_detail' anomaly.recording.pk %}">View Recording</a>
-      {% if not anomaly.resolved %}
-        <form method="post" action="{% url 'anomaly_resolve' anomaly.pk %}">
-          {% csrf_token %}
-          <button type="submit" class="button">Mark as Resolved</button>
-        </form>
+      {% if anomaly.resolved %}
+        <p><strong>Status:</strong> Resolved</p>
+      {% else %}
+        <p><strong>Status:</strong> Unresolved</p>
       {% endif %}
+
+      <div class="button-group">
+        <a class="button" href="{% url 'recording_detail' anomaly.recording.pk %}">View Recording</a>
+
+        {% if not anomaly.resolved %}
+          <form method="post" action="{% url 'anomaly_resolve' anomaly.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="button">Mark as Resolved</button>
+          </form>
+        {% endif %}
+      </div>
     </div>
-  </div>
-{% empty %}
-  <p>No anomaly reports available.</p>
-{% endfor %}
+  {% empty %}
+    <p>No anomaly reports available.</p>
+  {% endfor %}
+</section>
 {% endblock %}

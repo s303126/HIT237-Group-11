@@ -3,23 +3,32 @@
 {% block title %}Flag Anomaly - Listening to NT's Disappearing Animals{% endblock %}
 
 {% block content %}
+<section>
+  <h2>Flag Anomaly</h2>
+  <p>
+    Use this form to report a potential issue with a recording, such as incorrect
+    species identification, duplicate entry, poor audio quality, or another anomaly.
+  </p>
 
-<form method="post">
-  {% csrf_token %}
+  <div class="record-summary">
+    <h3>Recording Summary</h3>
+    <p><strong>Species:</strong> {{ recording.species.common_name }}</p>
+    <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
+    <p><strong>Location:</strong> {{ recording.location_name }}</p>
+  </div>
 
-  {{ form.reason.label_tag }}
-  {{ form.reason }}
+  <form method="post">
+    {% csrf_token %}
 
-  {{ form.description.label_tag }}
-  {{ form.description }}
+    {{ form.non_field_errors }}
 
-  <button type="submit">Submit Anomaly Report</button>
-</form>
+    <div class="form-group">
+      {{ form.reason.label_tag }}
+      {{ form.reason }}
+      {{ form.reason.errors }}
+    </div>
 
-<div class="record-summary">
-  <h3>Recording Summary</h3>
-  <p><strong>Species:</strong> {{ recording.species.common_name }}</p>
-  <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
-  <p><strong>Location:</strong> {{ recording.location_name }}</p>
-</div>
+    <button type="submit">Submit Anomaly Report</button>
+  </form>
+</section>
 {% endblock %}

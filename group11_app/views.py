@@ -26,6 +26,11 @@ Current views are for testing template page routing.
 class HomepageView(TemplateView):
     template_name = "home.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["recent_recordings"] = Recording.objects.get_timeline()[:3]
+        return context
+
 #def recording_list(request):
 #    return render(request, "recordings/recording_list.html")
 class ViewSubmissionsView(ListView):
@@ -74,7 +79,7 @@ class RecordingDetailView(DetailView):
 class SpeciesListView(ListView):
     queryset = Species.objects.get_with_recording_counts()
     template_name = "species/species_list.html"
-    context_object_name = "species"
+    context_object_name = "species_list"
 
 #class ViewSpeciesView(ListView):
 #    queryset = Recording.objects.get_timeline()
@@ -138,19 +143,21 @@ class AnomalyListView(ListView):
 class AnomalyCreateView(CreateView):
     model = Anomaly
     template_name = "anomalies/anomaly_form.html"
-    fields = ["reason"]  # add description if you want
+    fields = ["reason"]
     success_url = reverse_lazy("anomaly_list")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["recording"] = get_object_or_404(Recording, pk=self.kwargs["pk"])
+        return context
+
     def form_valid(self, form):
-        # tie anomaly to the recording being flagged
         recording_id = self.kwargs["pk"]
         form.instance.recording_id = recording_id
 
         if self.request.user.is_authenticated:
-            # unwrap lazy user and assign
             form.instance.flagged_by = User.objects.get(pk=self.request.user.pk)
         else:
-            # create or reuse a guest user
             guest_user, _ = User.objects.get_or_create(
                 username="guest",
                 defaults={"role": "citizen_scientist"}
@@ -158,6 +165,8 @@ class AnomalyCreateView(CreateView):
             form.instance.flagged_by = guest_user
 
         return super().form_valid(form)
+        
+    
 
 
 class AnomalyResolveView(View):

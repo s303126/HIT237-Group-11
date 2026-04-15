@@ -28,6 +28,10 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -69,7 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'group11_project.wsgi.application'
 
-UTH_USER_MODEL = 'group11_app.User'
+AUTH_USER_MODEL = 'group11_app.User'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

@@ -23,8 +23,8 @@ class SpeciesAdmin(admin.ModelAdmin):
 
 @admin.register(Recording)
 class RecordingAdmin(admin.ModelAdmin):
-    list_display = ('species', 'user', 'date_recorded', 'location_name', 'confidence_score')
-    list_filter = ('species__fauna_group',)
+    list_display = ('species', 'user', 'role', 'date_recorded', 'location_name', 'confidence_score')
+    list_filter = ('species__fauna_group', 'role')
     search_fields = ('species__common_name', 'user__username', 'location_name')
 
 @admin.register(Anomaly)

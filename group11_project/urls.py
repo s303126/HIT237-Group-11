@@ -17,25 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from group11_app import views
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 """
 Current URL patterns are for testing template page routing. 
 """
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("group11_app.urls")),  # include app urls
-    # homepage
-
-    # recordings
-#    path('recordings/', views.recording_list, name='recording_list'),
-#    path('recordings/submit/', views.recording_create, name='recording_create'),
-#    path('recordings/<int:pk>/', views.recording_detail, name='recording_detail'),
-
-    # species
-#    path('species/', views.species_list, name='species_list'),
-#    path('species/<int:pk>/', views.species_detail, name='species_detail'),
-
-    # anomalies
-#    path('anomalies/', views.anomaly_list, name='anomaly_list'),
-#    path('recordings/<int:pk>/flag/', views.anomaly_create, name='anomaly_create'),
-]
+    path("", include("group11_app.urls")), 
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

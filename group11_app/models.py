@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Count, Avg
-from django.utils import timezone 
+from django.utils import timezone
+from django.core.validators import FileExtensionValidator
+
+from group11_project import settings 
 
 # Create your models here.
 
@@ -223,10 +226,10 @@ class RecordingManager(models.Manager):
                 .order_by('-flagged_count'))
 
 class Recording(models.Model):
+    ROLE_CHOICES = [('citizen', 'Citizen Scientist'), ('researcher', 'Researcher'),]
     objects = RecordingManager()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     species = models.ForeignKey(Species, on_delete=models.PROTECT)
-    audio_file = models.FileField(upload_to='recordings/')
     date_recorded = models.DateTimeField()
     date_submitted = models.DateTimeField(auto_now_add=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
@@ -234,9 +237,12 @@ class Recording(models.Model):
     location_name = models.CharField(max_length=100, blank=True)
     confidence_score = models.DecimalField(max_digits=3, decimal_places=2)  # 0.00–1.00
     notes = models.TextField(blank=True)
+    audio_file = models.FileField(upload_to='recordings/', validators=[FileExtensionValidator(allowed_extensions=['mp3'])])
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='citizen')
     
     def __str__(self):
-        return f"{self.species} — {self.date_recorded:%Y-%m-%d} by {self.user}"
+        return f"{self.species} — {self.date_recorded:%Y-%m-%d} by {self.user} ({self.get_role_display()})"
+
 
     def is_low_confidence(self, threshold=0.4):
         """Returns True if the confidence score is below the given threshold."""

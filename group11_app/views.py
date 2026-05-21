@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
-from .models import Anomaly, Recording, User, Species
 from django.views import View
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.http import HttpResponseForbidden
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Anomaly, Recording, User, Species
+from accounts.mixins import StaffRequiredMixin
 User = get_user_model()
 
 from .models import User
@@ -25,7 +28,7 @@ class ViewSubmissionsView(ListView):
     context_object_name = "recordings"
 
 
-class RecordingCreateView(CreateView):
+class RecordingCreateView(LoginRequiredMixin, CreateView):
     model = Recording
     template_name = "recordings/recording_form.html"
     fields = [
@@ -36,14 +39,7 @@ class RecordingCreateView(CreateView):
     success_url = reverse_lazy("recording_list")
 
     def form_valid(self, form):
-        if self.request.user.is_authenticated:
-            form.instance.user = self.request.user
-        else:
-            guest_user, created = User.objects.get_or_create(
-                username="guest",
-                defaults={"role": "citizen_scientist"}
-            )
-            form.instance.user = guest_user
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
 
@@ -80,7 +76,7 @@ class AnomalyListView(ListView):
         return Anomaly.objects.get_unresolved()
 
 
-class AnomalyCreateView(CreateView):
+class AnomalyCreateView(LoginRequiredMixin, CreateView):
     model = Anomaly
     template_name = "anomalies/anomaly_form.html"
     fields = ["reason"]
@@ -94,35 +90,22 @@ class AnomalyCreateView(CreateView):
     def form_valid(self, form):
         recording_id = self.kwargs["pk"]
         form.instance.recording_id = recording_id
-
-        if self.request.user.is_authenticated:
-            form.instance.flagged_by = User.objects.get(pk=self.request.user.pk)
-        else:
-            guest_user, _ = User.objects.get_or_create(
-                username="guest",
-                defaults={"role": "citizen_scientist"}
-            )
-            form.instance.flagged_by = guest_user
-
+        form.instance.flagged_by = self.request.user
         return super().form_valid(form)
 
 
-class AnomalyResolveView(View):
+class AnomalyResolveView(LoginRequiredMixin, View):
     def post(self, request, pk):
         anomaly = get_object_or_404(Anomaly, pk=pk)
-
-        if request.user.is_authenticated:
-            user = User.objects.get(pk=request.user.pk)
-        else:
-            user, _ = User.objects.get_or_create(
-                username="guest",
-                defaults={"role": "citizen_scientist"}
-            )
-
-        anomaly.resolve(user)
+        
+        # Check permission: researcher OR the user who flagged it
+        if request.user.role != 'researcher' and anomaly.flagged_by != request.user:
+            return HttpResponseForbidden("You do not have permission to resolve this anomaly.")
+        
+        anomaly.resolve(request.user)
         return redirect(reverse_lazy("anomaly_list"))
     
-class RecordingUpdateView(UpdateView):
+class RecordingUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Recording
     template_name = "recordings/recording_form.html"
     fields = [
@@ -133,7 +116,7 @@ class RecordingUpdateView(UpdateView):
     success_url = reverse_lazy("recording_list")
 
 
-class RecordingDeleteView(DeleteView):
+class RecordingDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Recording
     template_name = "recordings/recording_confirm_delete.html"
     success_url = reverse_lazy("recording_list")

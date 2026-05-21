@@ -2,7 +2,7 @@
 
 **Author:** Melanie Bardoux
 
-**Status:** Accepted
+**Status:** Superseded (See ADR-17 (partial), ADR-18)
 
 **AI Usage:**  
 Claude AI used to identify required changes and assist with code implementation.

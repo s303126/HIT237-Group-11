@@ -26,4 +26,5 @@ Current URL patterns are for testing template page routing.
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("group11_app.urls")), 
+    path('accounts/', include('accounts.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

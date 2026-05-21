@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Listening to NT's Disappearing Animals{% endblock %}
+
+{% block content %}
+<h2>Login</h2>
+
+{% if form.non_field_errors %}
+    <div style="color: red; margin-bottom: 1rem;">
+        {{ form.non_field_errors }}
+    </div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div style="margin-bottom: 1rem;">
+        <label for="id_username">Username:</label><br>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <div style="color: red;">{{ form.username.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div style="margin-bottom: 1rem;">
+        <label for="id_password">Password:</label><br>
+        {{ form.password }}
+        {% if form.password.errors %}
+            <div style="color: red;">{{ form.password.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <button type="submit">Login</button>
+</form>
+
+<p style="margin-top: 1rem;">
+    Don't have an account? <a href="{% url 'accounts:signup' %}">Sign up here</a>
+</p>
+{% endblock %}

@@ -1,6 +1,6 @@
 # HIT237-Group-11
 
-**Group Contract Version:** 1.1 | **Last Updated:** 18/03/2026
+**Group Contract Version:** 2.1 | **Last Updated:** 21/05/2026
 
 # 1.0 Terms and Conditions
 ## 1.1 Group Allocation
@@ -24,45 +24,58 @@ All issues will be discussed openly, and effort will be made from each member in
 If team members agree that there is no foreseeable resolution to the issue, the Collaborative Learning Facilitator will be contacted with a written summary of steps already taken to resolve the issue within the team.
 
 ## 1.6 Academic Integrity and AI usage
-All team members must uphold CDU's Academic Integrity policies throughout all assessments. Team members must genuinely understand and be able to explain all submitted work, no member will plagiarise from external sources.
+All team members must uphold CDU's Academic Integrity policies. No member will plagiarise from external sources.
 
-AI coding assistants are permitted as per assessment specifications. Any significant AI contribution must have a corresponding ADR entry written in the contributing member's own words, demonstrating genuine understanding of the code not just a summary of the AI output. Where applicable, the ADR entry structure outlined in the Assessment 2 task sheet on Learnline should be followed.
+**AI Tool Usage and Learning Integrity**
+
+AI coding assistants are permitted per assessment specifications. Members may rely on AI tools to varying degrees. To maintain learning integrity: members using AI-generated code must review, understand, test, and be able to explain, debug, and modify it before committing.
+
+**Documentation and Attribution**
+
+Significant AI contributions require ADR entries demonstrating genuine understanding (not AI output summaries), including the problem addressed, alternatives considered and specific code references. 
+
+**Verification and Accountability**
+
+The use of AI carries responsibility to demonstrate understanding. If a member cannot explain their committed code during internal peer review or testing they must inform the group. The code will be collaboratively reviewed at the next meeting. If understanding cannot be demonstrated, the code will be rewritten by the member with group support. 
+
 
 ## 1.7 Amending the Contract
-It is expected that the Contract will frequently be amended as the team progresses through the assessments.
+It is expected that the Contract will be amended as the team progresses through the assessments.
 Any member may propose an amendment by posting in the group Microsoft Teams channel. The proposal must remain open for at least 24 hours to allow all members to respond. Amendments require agreement from at least three of four members. The amending member then updates the markdown file and the contract version and date, then commits with a message that includes the reason and section amended.
 
 
 # 2.0 Provisional Milestones and Checkpoints
 ## 2.1 Key milestones with target dates for each assessment
 
+**Assessment 2 - Report 1**
+
 (Milestone 1: Target Date - 23/03) Initial Assessment discussion, team member role assignment, expectations and requirements from the team.
 Following project theme (5), assign design and development roles to team members for each part of the web app. completed tasks uploaded to GitHub to be merged. following code design and implementation requirements according to task (Django).
 
 (Milestone 2: Target Date - 30/03) Follow up with team on individual task progression, discuss any barriers/blockers that might need to be addressed and propose resolutions and review code/design progress. Contribute to Architectural Decision Record (ADR) as well as update project plan and group contract (GitHub).
 
-(Milestone 3: Target Date 7/04) Finalize project and merge pending changes with GitHub project. Perform testing prepare documentation to ensure there are no errors. Update ADR, project plan and group contract.
+(Milestone 3: Target Date 7/04) Finalise project and merge pending changes with GitHub project. Perform testing prepare documentation to ensure there are no errors. Update ADR, project plan and group contract.
 
 (Milestone 4: Target Date 14/04) Assessment 2 Submission. Meeting to reflect on deliverables, discuss and prepare initial requirements and scope for Assessment 4. Distribute tasks for team members
 
-Submission includes:
-    - The ADR as a Markdown (.md) file
-    - The complete, runnable Django app
-    - The updated project plan and contract as a Markdown (.md) file
-    - Supplementary materials
-    - The requirements.txt file
-
 (Milestone 5: Target Date 21/04) Follow up with team on individual task progression, discuss any barriers/blockers that might need to be addressed and propose resolutions and review code/design progress. Include supplementary materials.
 
-(Milestone X: Target Date 28/05) Assessment 4 Submission. Meeting to reflect on deliverables and overall team work.
+**Assessment 4 - Report 2**
+
+(Milestone 5: Target Date - 11/05) Initial Assessment 4 discussion, task assignment based on requirements. Discuss new features to be implemented and update project plan/group contract. Begin work on assigned components.
+
+(Milestone 6: Target Date - 18/05) Follow up with team on individual task progression, discuss any barriers/blockers that might need to be addressed and propose resolutions. Review progress.
+
+(Milestone 7: Target Date - 25/05) Complete assessment-specific tasks (authentication, service layer, exception handling, testing suite). Begin implementing new additional features.
+
+(Milestone 8: Target Date - 28/05) Assessment 4 Submission. Finalise new features, perform testing, prepare documentation to ensure there are no errors. Ensure ADR's are up to date, group contract, ERD, and class diagram.
 
 Submission includes:
-    - The ADR as a Markdown (.md) file
+    - ADRs as Markdown (.md) files
     - The complete, runnable Django app
-    - The updated project plan and contract as a Markdown (.md) file
+    - The updated contract as a Markdown (.md) file
     - Supplementary materials
     - The requirements.txt file
-
 
 ## 2.2 Task breakdowns showing how the assessed topics will be tackled and by whom
 
@@ -73,24 +86,28 @@ To ensure balanced contributions and clear responsibility throughout the project
     -	Use Django ORM to implement relationships between entities
     -	Use Django QuerySet APIs to retrieve and filter biodiversity data
     -	Produce ER diagrams showing data relationships
+    -   Service Layer Architecture
 
 ### Application Logic and Views - Isaac Jessen 
     -	Implement application logic using Django class-based views
     -	Handle requests for audio recording submission and view of species data
     -	Ensure views interact correctly with models and templates
     -	Apply Django design philosophies
+    -   Exception Handling 
 
 ### User interface and Templates - Aaron Madelo
     -	Develop front-end interface using Django templates
     -	Implement pages for recording submission and viewing timelines of observations
     -	Integrate Django Template Language (DTL) variables
     -	Build templates and UI, and maintain for consistency and usability
+    -   Authentication System/Testing
 
 ### QuerySet APIs, Data Managemnet and Documentation - Melanie Bardoux
     -	Write and manage all QuerySet APIs across the project
     -	Manage and maintain project data including sourcing and importing species data
     -	Create and maintain the ERD and supplementary materials including class diagrams
     -	Set up and maintain the ADR, ensuring all entries follow the correct structure and required information
+    -   Authentication System/Testing
 
 ### Architectural Decision Records (ADR) and Documentation:
     -	All members participate in coding, testing and debugging
@@ -109,9 +126,12 @@ To ensure balanced contributions and clear responsibility throughout the project
 | 6/4  | Weekly Checkup                                                                                                                                                                                                                  | Meeting |
 | 10/4 | All team members confirm if any last tasks are on track to be completed before 14/4                                                                                                                                             | Meeting |
 | 13/4 | No meeting as the assignment is due the following day, so any problems should already have been shared via message.   Team members confirm that all tasks have been completed and that the assignment is ready to be submitted. | Message |
-| 20/4 | Discuss steps toward planning assessment 4                                                                                                                                                                                      | Meeting |
-| n/a  | Team members create post when they’ve completed a task or encounter any roadblocks (this can then be resolved either in the next meeting or immediately depending on urgency)                                                   | Message |
-| n/a  | Weekly meetings will continue once plans are made from the 20/4 meeting                                                                                                                                                         |         |
+| 20/4 | Discuss steps toward planning assessment 4 | Meeting |                                                                                                                                             
+| 11/5 | Assessment 4 task allocation, discuss new features, assessment 2 feedback, update project plan/contract | Meeting |
+| 18/5 | Weekly Checkup | Meeting |
+| 25/5 | Verify completed assessment-specific tasks. Confirm new feature implementation | Meeting |
+| 27/5 | Final review before submission - confirm all tasks completed | Online check-in |
+| 28/5 | Assessment 4 due | Submission |
 
 
 ## 2.4 Integration Points

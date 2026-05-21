@@ -113,7 +113,7 @@ To ensure balanced contributions and clear responsibility throughout the project
     -	All members participate in coding, testing and debugging
     -	All members contribute to the ADR; entries demonstrate understanding of all implemented features, including AI-assisted code 
     -	Contributions are managed with Git branches and pull requests 
-    -	All entries must include context, alternatives, decision rationale and code references
+    -	All entries must include date, context, alternatives, decision rationale and code references
     -	All members must document decisions related to their work 
 
 

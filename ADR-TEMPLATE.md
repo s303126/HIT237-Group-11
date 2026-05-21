@@ -21,6 +21,8 @@ ADR Entry Template
 
 ### ADR-XXX: [Short descriptive title]
 
+**Date:** Date
+
 **Author:** Name
 
 **Status:** Proposed | Accepted | Superseded (see ADR-XXX)

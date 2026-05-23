@@ -129,6 +129,7 @@ class User(AbstractUser):
         ('citizen_scientist', 'Citizen Scientist')
     ]
     role = models.CharField(max_length=20, default='citizen_scientist', choices=ROLE_TYPES)
+    is_approved = models.BooleanField(default=False)
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='custom_user_set',
@@ -159,6 +160,10 @@ class User(AbstractUser):
     def get_flagged_submissions(self):
         """Returns this user's recordings that have been flagged as anomalies."""
         return self.recording_set.filter(anomaly__isnull=False).distinct()
+    
+    def has_researcher_access(self):
+        """True only if user is an approved researcher."""
+        return self.role == 'researcher' and self.is_approved
     
 class RecordingManager(models.Manager):
     def get_timeline(self):

@@ -3,9 +3,17 @@ from .models import User, Species, FaunaGroup, ThreatStatus, Recording, Anomaly
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'role')
-    list_filter = ('role',)
+    list_display = ('username', 'role', 'is_approved')
+    list_filter = ('role', 'is_approved')
     search_fields = ('username',)
+    list_editable = ('is_approved',)
+    fields = ('username', 'role', 'is_approved')
+    actions = ['approve_researchers']
+
+    def approve_researchers(self, request, queryset):
+        updated = queryset.filter(role='researcher').update(is_approved=True)
+        self.message_user(request, f"{updated} researcher(s) approved.")
+    approve_researchers.short_description = "Approve selected researchers"
 
 @admin.register(ThreatStatus)
 class ThreatStatusAdmin(admin.ModelAdmin):

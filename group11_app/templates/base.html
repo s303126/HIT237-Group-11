@@ -23,7 +23,10 @@
       <li><a href="{% url 'anomaly_list' %}">Anomalies</a></li>
       {% if user.is_authenticated %}
         <li class="nav-user-item">
-          <span class="nav-user">{{ user.username }} ({{ user.get_role_display }})</span>
+          <span class="nav-user">
+            {{ user.username }}:
+            {{ user.get_role_display }}{% if user.role == 'researcher' and not user.is_approved %} <span class="role-pending">(Pending)</span>{% endif %}
+          </span>
         </li>
         <li>
           <form method="post" action="{% url 'accounts:logout' %}" class="nav-logout-form">

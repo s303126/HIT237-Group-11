@@ -99,7 +99,7 @@ class AnomalyResolveView(LoginRequiredMixin, View):
         anomaly = get_object_or_404(Anomaly, pk=pk)
         
         # Check permission: researcher OR the user who flagged it
-        if request.user.role != 'researcher' and anomaly.flagged_by != request.user:
+        if not request.user.has_researcher_access() and anomaly.flagged_by != request.user:
             return HttpResponseForbidden("You do not have permission to resolve this anomaly.")
         
         anomaly.resolve(request.user)

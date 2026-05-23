@@ -81,6 +81,10 @@ nav a:hover {
   background-color: #2f5d50;
 }
 
+.role-pending {
+    color: rgb(210, 44, 44);
+}
+
 main {
   padding: 2rem;
 }

@@ -28,6 +28,7 @@ nav ul {
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 nav a {
@@ -39,6 +40,44 @@ nav a {
 }
 
 nav a:hover {
+  background-color: #2f5d50;
+}
+
+.nav-user-item {
+  margin-left: auto;
+}
+
+.nav-user {
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1rem;
+  display: block;
+  margin-top: 0.7rem;
+}
+
+.nav-pending {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.nav-logout-form {
+  margin: 0;
+  padding: 0;
+}
+
+.nav-logout-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  display: block;
+}
+
+.nav-logout-btn:hover {
   background-color: #2f5d50;
 }
 

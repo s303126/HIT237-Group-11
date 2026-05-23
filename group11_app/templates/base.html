@@ -3,22 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>{% block title %}Listening to NT's Disappearing Animals{% endblock %}</title>
-
   {% load static %}
   <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-
 <body>
-
   <header>
     <h1>Listening to NT's Disappearing Animals</h1>
     <p class="subtitle">
       A biodiversity monitoring platform for logging and reviewing species call recordings across the Northern Territory.
     </p>
   </header>
-
   <nav>
     <ul>
       <li><a href="{% url 'home' %}">Home</a></li>
@@ -26,19 +21,29 @@
       <li><a href="{% url 'recording_list' %}">View Timeline</a></li>
       <li><a href="{% url 'species_list' %}">Species</a></li>
       <li><a href="{% url 'anomaly_list' %}">Anomalies</a></li>
+      {% if user.is_authenticated %}
+        <li class="nav-user-item">
+          <span class="nav-user">{{ user.username }} ({{ user.get_role_display }})</span>
+        </li>
+        <li>
+          <form method="post" action="{% url 'accounts:logout' %}" class="nav-logout-form">
+            {% csrf_token %}
+            <button type="submit" class="nav-logout-btn">Logout</button>
+          </form>
+        </li>
+      {% else %}
+        <li class="nav-user-item"><a href="{% url 'accounts:login' %}">Login</a></li>
+        <li><a href="{% url 'accounts:signup' %}">Sign Up</a></li>
+      {% endif %}
     </ul>
   </nav>
-
   <main>
     {% block content %}
     {% endblock %}
   </main>
-
   <footer>
     <p>&copy; 2026 Listening to NT's Disappearing Animals</p>
   </footer>
-
   <script src="{% static 'script.js' %}"></script>
-
 </body>
 </html>

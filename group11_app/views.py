@@ -7,7 +7,7 @@ from django.http import HttpResponseForbidden
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Anomaly, Recording, User, Species
-from accounts.mixins import StaffRequiredMixin
+from accounts.mixins import StaffRequiredMixin, OwnerOrStaffRequiredMixin
 User = get_user_model()
 
 from .models import User
@@ -105,7 +105,7 @@ class AnomalyResolveView(LoginRequiredMixin, View):
         anomaly.resolve(request.user)
         return redirect(reverse_lazy("anomaly_list"))
     
-class RecordingUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
+class RecordingUpdateView(LoginRequiredMixin, OwnerOrStaffRequiredMixin, UpdateView):
     model = Recording
     template_name = "recordings/recording_form.html"
     fields = [
@@ -116,7 +116,7 @@ class RecordingUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     success_url = reverse_lazy("recording_list")
 
 
-class RecordingDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
+class RecordingDeleteView(LoginRequiredMixin, OwnerOrStaffRequiredMixin, DeleteView):
     model = Recording
     template_name = "recordings/recording_confirm_delete.html"
     success_url = reverse_lazy("recording_list")

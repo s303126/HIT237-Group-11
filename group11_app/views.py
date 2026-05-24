@@ -10,8 +10,8 @@ from .models import Anomaly, Recording, User, Species
 from accounts.mixins import StaffRequiredMixin
 User = get_user_model()
 
-from .models import User
-
+from .services import validate_recording_duplicate, validate_anomaly_duplicate
+from .exceptions import DuplicateRecording, DuplicateAnomaly
 
 class HomepageView(TemplateView):
     template_name = "home.html"
@@ -21,33 +21,10 @@ class HomepageView(TemplateView):
         context["recent_recordings"] = Recording.objects.get_timeline()[:3]
         return context
 
-
 class ViewSubmissionsView(ListView):
     queryset = Recording.objects.get_timeline()
     template_name = "recordings/recording_list.html"
     context_object_name = "recordings"
-
-
-class RecordingCreateView(LoginRequiredMixin, CreateView):
-    model = Recording
-    template_name = "recordings/recording_form.html"
-    fields = [
-        "species", "date_recorded", "location_name",
-        "latitude", "longitude", "confidence_score",
-        "audio_file", "notes",
-    ]
-    success_url = reverse_lazy("recording_list")
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
-
-class RecordingDetailView(DetailView):
-    model = Recording
-    template_name = "recordings/recording_detail.html"
-    context_object_name = "recording"
-
 
 class SpeciesListView(ListView):
     queryset = Species.objects.get_with_recording_counts()
@@ -89,6 +66,17 @@ class AnomalyCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         recording_id = self.kwargs["pk"]
+        recording = Recording.objects.get(id=recording_id)
+        
+        try:
+            validate_anomaly_duplicate(
+                recording=recording,
+                reason=form.cleaned_data["reason"],
+            )
+        except DuplicateAnomaly as e:
+            form.add_error("reason", str(e))
+            return self.form_invalid(form)
+        
         form.instance.recording_id = recording_id
         form.instance.flagged_by = self.request.user
         return super().form_valid(form)
@@ -104,7 +92,33 @@ class AnomalyResolveView(LoginRequiredMixin, View):
         
         anomaly.resolve(request.user)
         return redirect(reverse_lazy("anomaly_list"))
-    
+
+class RecordingCreateView(LoginRequiredMixin, CreateView):
+    model = Recording
+    template_name = "recordings/recording_form.html"
+    fields = [
+        "species", "date_recorded", "location_name",
+        "latitude", "longitude", "confidence_score",
+        "audio_file", "notes",
+    ]
+    success_url = reverse_lazy("recording_list")
+
+    def form_valid(self, form):
+        try:
+            validate_recording_duplicate(
+                species=form.cleaned_data["species"],
+                date_recorded=form.cleaned_data["date_recorded"],
+                location_name=form.cleaned_data["location_name"],
+                latitude=form.cleaned_data["latitude"],
+                longitude=form.cleaned_data["longitude"],
+            )
+        except DuplicateRecording as e:
+            form.add_error(None, str(e))
+            return self.form_invalid(form)
+        
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
 class RecordingUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Recording
     template_name = "recordings/recording_form.html"
@@ -115,6 +129,26 @@ class RecordingUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     ]
     success_url = reverse_lazy("recording_list")
 
+    def form_valid(self, form):
+        try:
+            validate_recording_duplicate(
+                species=form.cleaned_data["species"],
+                date_recorded=form.cleaned_data["date_recorded"],
+                location_name=form.cleaned_data["location_name"],
+                latitude=form.cleaned_data["latitude"],
+                longitude=form.cleaned_data["longitude"],
+                exclude_id=self.object.id,
+            )
+        except DuplicateRecording as e:
+            form.add_error(None, str(e))
+            return self.form_invalid(form)
+        
+        return super().form_valid(form)
+
+class RecordingDetailView(DetailView):
+    model = Recording
+    template_name = "recordings/recording_detail.html"
+    context_object_name = "recording"
 
 class RecordingDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = Recording

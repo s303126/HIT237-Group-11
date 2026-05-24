@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - Listening to NT's Disappearing Animals{% endblock %}
+
+{% block content %}
+<style>
+  .error-container {
+    max-width: 600px;
+    margin: 4rem auto;
+    text-align: center;
+    background-color: white;
+    padding: 3rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .error-code {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #2f5d50;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .error-title {
+    font-size: 1.75rem;
+    color: #222;
+    margin: 1rem 0;
+  }
+
+  .error-message {
+    font-size: 1rem;
+    color: #666;
+    margin: 1.5rem 0 2rem;
+    line-height: 1.6;
+  }
+
+  .error-button {
+    display: inline-block;
+    background-color: #2f5d50;
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+
+  .error-button:hover {
+    background-color: #1f3f36;
+  }
+</style>
+
+<div class="error-container">
+  <h1 class="error-code">404</h1>
+  <h2 class="error-title">Page Not Found</h2>
+  <p class="error-message">
+    The page you're looking for doesn't exist or has been moved. 
+  </p>
+  <a href="{% url 'home' %}" class="error-button">Return to Homepage</a>
+</div>
+
+{% endblock %}

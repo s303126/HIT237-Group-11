@@ -10,8 +10,8 @@ from .models import Anomaly, Recording, User, Species
 from accounts.mixins import StaffRequiredMixin
 User = get_user_model()
 
-from .services import validate_recording_duplicate, validate_anomaly_duplicate
-from .exceptions import DuplicateRecording, DuplicateAnomaly
+from .services import validate_recording_duplicate, validate_anomaly_duplicate, validate_audio_file, validate_anomaly_not_resolved
+from .exceptions import DuplicateRecording, DuplicateAnomaly, InvalidAudioFileLength, AnomalyAlreadyResolved
 
 class HomepageView(TemplateView):
     template_name = "home.html"
@@ -90,6 +90,12 @@ class AnomalyResolveView(LoginRequiredMixin, View):
         if not request.user.has_researcher_access() and anomaly.flagged_by != request.user:
             return HttpResponseForbidden("You do not have permission to resolve this anomaly.")
         
+        try:
+            validate_anomaly_not_resolved(anomaly)
+        except AnomalyAlreadyResolved as e:
+            messages.error(request, str(e))
+            return redirect(reverse_lazy("anomaly_list"))
+        
         anomaly.resolve(request.user)
         return redirect(reverse_lazy("anomaly_list"))
 
@@ -114,6 +120,12 @@ class RecordingCreateView(LoginRequiredMixin, CreateView):
             )
         except DuplicateRecording as e:
             form.add_error(None, str(e))
+            return self.form_invalid(form)
+        
+        try:
+            validate_audio_file(form.cleaned_data["audio_file"])
+        except InvalidAudioFileLength as e:
+            form.add_error("audio_file", str(e))
             return self.form_invalid(form)
         
         form.instance.user = self.request.user

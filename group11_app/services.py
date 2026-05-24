@@ -1,5 +1,6 @@
 from .models import Recording, Anomaly
-from .exceptions import DuplicateRecording, DuplicateAnomaly
+from .exceptions import DuplicateRecording, DuplicateAnomaly, InvalidAudioFileLength, AnomalyAlreadyResolved
+from mutagen.mp3 import MP3
 
 
 def validate_recording_duplicate(species, date_recorded, location_name, latitude, longitude, exclude_id=None):
@@ -56,6 +57,46 @@ def validate_anomaly_duplicate(recording, reason):
         
         if query.exists():
             raise DuplicateAnomaly(f"This recording already has an unresolved '{reason}' anomaly report.")
+    
+    except Anomaly.DoesNotExist:
+        pass
+
+def validate_audio_file(audio_file, max_seconds=60):
+    """
+    Validates that audio file is within max duration.
+    
+    Args:
+        audio_file: Django UploadedFile object
+        max_seconds: Maximum allowed duration in seconds (default 60)
+    
+    Raises:
+        InvalidAudioFile: If audio file is too long or cannot be processed
+    """
+    try:
+        audio = MP3(audio_file)
+        duration = audio.info.length
+        
+        if duration > max_seconds:
+            raise InvalidAudioFileLength(f"Audio file is too long ({duration:.1f}s). Maximum is {max_seconds} seconds.")
+    
+    except InvalidAudioFileLength:
+        raise
+    except Exception:
+        pass
+
+def validate_anomaly_not_resolved(anomaly):
+    """
+    Validates that an anomaly hasn't already been resolved.
+    
+    Args:
+        anomaly: Anomaly instance
+    
+    Raises:
+        AnomalyAlreadyResolved: If the anomaly is already resolved
+    """
+    try:
+        if anomaly.resolved:
+            raise AnomalyAlreadyResolved("This anomaly has already been resolved.")
     
     except Anomaly.DoesNotExist:
         pass

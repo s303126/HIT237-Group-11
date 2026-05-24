@@ -13,6 +13,10 @@ User = get_user_model()
 from .services import validate_recording_duplicate, validate_anomaly_duplicate, validate_audio_file, validate_anomaly_not_resolved
 from .exceptions import DuplicateRecording, DuplicateAnomaly, InvalidAudioFileLength, AnomalyAlreadyResolved
 
+#404 error handler
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
+
 class HomepageView(TemplateView):
     template_name = "home.html"
 

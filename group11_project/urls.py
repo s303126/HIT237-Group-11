@@ -28,3 +28,6 @@ urlpatterns = [
     path("", include("group11_app.urls")), 
     path('accounts/', include('accounts.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# handles 404 errors
+handler404 = 'group11_app.views.custom_404'

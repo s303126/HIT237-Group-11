@@ -134,6 +134,7 @@ class RecordingCreateView(LoginRequiredMixin, CreateView):
         
         form.instance.user = self.request.user
         return super().form_valid(form)
+
 class RecordingUpdateView(LoginRequiredMixin, OwnerOrStaffRequiredMixin, UpdateView):
     model = Recording
     template_name = "recordings/recording_form.html"
@@ -143,6 +144,27 @@ class RecordingUpdateView(LoginRequiredMixin, OwnerOrStaffRequiredMixin, UpdateV
         "audio_file", "notes",
     ]
     success_url = reverse_lazy("recording_list")
+
+    def form_valid(self, form):
+        try:
+            validate_recording_duplicate(
+                species=form.cleaned_data["species"],
+                date_recorded=form.cleaned_data["date_recorded"],
+                location_name=form.cleaned_data["location_name"],
+                latitude=form.cleaned_data["latitude"],
+                longitude=form.cleaned_data["longitude"],
+                exclude_id=self.object.id,
+            )
+        except DuplicateRecording as e:
+            form.add_error(None, str(e))
+            return self.form_invalid(form)
+        
+        return super().form_valid(form)
+
+class RecordingDetailView(DetailView):
+    model = Recording
+    template_name = "recordings/recording_detail.html"
+    context_object_name = "recording"
 
 
 class RecordingDeleteView(LoginRequiredMixin, OwnerOrStaffRequiredMixin, DeleteView):

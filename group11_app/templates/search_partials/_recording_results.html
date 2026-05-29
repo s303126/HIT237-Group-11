@@ -1,0 +1,29 @@
+<section>  
+  <form method="get" action="{% url 'search' %}">
+    <input type="hidden" name="type" value="recordings">
+    <input type="text" name="query" placeholder="Search by species name or username..." value="{{ request.GET.query }}">
+    <button type="submit">Search</button>
+  </form>
+
+{% for recording in results %}
+  <div class="record-card">
+    <h3>{{ recording.species.common_name }}</h3>
+    <p><strong>Scientific Name:</strong> {{ recording.species.scientific_name }}</p>
+    <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
+    <p><strong>Location:</strong> {{ recording.location_name }}</p>
+    <p><strong>Submitted By:</strong> {{ recording.user.username }}</p>
+    <p><strong>Confidence:</strong> {{ recording.confidence_score }}</p>
+
+    {% if recording.has_unresolved_anomalies %}
+      <p><strong>Status:</strong> <span style="color: red;">Flagged as anomaly</span></p>
+    {% else %}
+      <p><strong>Status:</strong> Normal</p>
+    {% endif %}
+
+    <div class="button-group">
+      <a class="button" href="{% url 'recording_detail' recording.pk %}">View Details</a>
+      <a class="button" href="{% url 'anomaly_create' recording.pk %}">Flag Anomaly</a>
+    </div>
+  </div>
+{% endfor %}
+</section> 

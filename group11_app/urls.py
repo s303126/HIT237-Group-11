@@ -10,6 +10,7 @@ from .views import AnomalyCreateView
 from .views import AnomalyResolveView
 from .views import RecordingUpdateView
 from .views import RecordingDeleteView
+from . import views
 
 urlpatterns = [
     path("recordings/", ViewSubmissionsView.as_view(), name="recording_list"),
@@ -23,6 +24,7 @@ urlpatterns = [
     path("", HomepageView.as_view(), name="home"),
     path("recordings/<int:pk>/edit/", RecordingUpdateView.as_view(), name="recording_update"),
     path("recordings/<int:pk>/delete/", RecordingDeleteView.as_view(), name="recording_delete"),
+    path('search/', views.search, name='search'),
     path("recordings/review/", ReviewQueueView.as_view(), name="review_queue"),
     path("recordings/<int:pk>/approve/", RecordingApproveView.as_view(), name="recording_approve"),
     path("recordings/<int:pk>/reject/", RecordingRejectView.as_view(), name="recording_reject"),

@@ -14,10 +14,32 @@ User = get_user_model()
 from .services import validate_recording_duplicate, validate_anomaly_duplicate, validate_audio_file, validate_anomaly_not_resolved
 from .exceptions import DuplicateRecording, DuplicateAnomaly, InvalidAudioFileLength, AnomalyAlreadyResolved
 
+from django.db.models import Q
+
 #404 error handler
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
 
+
+#search
+def search(request):
+    #Search view that handles recordings, species, and anomalies. Uses query parameter 'type' to determine which search to perform.
+
+    query = request.GET.get('query', '').strip()
+    search_type = request.GET.get('type', 'recordings')  # Default to recordings
+    
+    if query:
+        if search_type == 'recordings':
+            results = Recording.objects.search(query)
+        elif search_type == 'species':
+            results = Species.objects.search(query)
+        elif search_type == 'anomalies':
+            results = Anomaly.objects.search(query)
+    else:     
+        results = []
+    
+    return render(request, 'search.html', {'query': query, 'search_type': search_type, 'results': results})
+ 
 class HomepageView(TemplateView):
     template_name = "home.html"
 

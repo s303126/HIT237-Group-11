@@ -6,6 +6,13 @@
 <section>
   <h2>Recent Species Recordings</h2>
   <p>Browse recent submissions from researchers and citizen scientists.</p>
+  
+  <form method="get" action="{% url 'search' %}">
+    <input type="hidden" name="type" value="recordings">
+    <input type="text" name="query" placeholder="Search by species name or username..." value="{{ request.GET.query }}">
+    <button type="submit">Search</button>
+  </form>
+  
 
   {% for recording in recordings %}
     <div class="record-card">

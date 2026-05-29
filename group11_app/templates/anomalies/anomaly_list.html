@@ -9,6 +9,12 @@
     Review unresolved anomaly reports linked to submitted recordings.
   </p>
 
+  <form method="get" action="{% url 'search' %}">
+    <input type="hidden" name="type" value="anomalies">
+    <input type="text" name="query" placeholder="Search by species name or username..." value="{{ request.GET.query }}">
+    <button type="submit">Search</button>
+  </form>
+
   {% for anomaly in anomalies %}
     <div class="record-card">
       <h3>{{ anomaly.recording.species.common_name }} Recording</h3>

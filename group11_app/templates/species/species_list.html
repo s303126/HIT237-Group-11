@@ -9,6 +9,12 @@
     Browse species recorded in the system, including scientific names,
     fauna groups, and conservation status.
   </p>
+  
+  <form method="get" action="{% url 'search' %}">
+    <input type="hidden" name="type" value="species">
+    <input type="text" name="query" placeholder="Search by species name or fauna group..." value="{{ request.GET.query }}">
+    <button type="submit">Search</button>
+  </form>
 
   <div class="card-container">
     {% for species in species_list %}

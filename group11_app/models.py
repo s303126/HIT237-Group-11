@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models import Count, Avg
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
+from django.db.models import Q
 
 from group11_project import settings 
 
@@ -79,10 +80,17 @@ class SpeciesManager(models.Manager):
                 .select_related('threat_status', 'fauna_group')
                 .order_by('-recording_count'))
     
-    def search_by_name(self, query):
-        # Returns species matching a common or scientific name search
-        return (self.filter(common_name__icontains=query) |
-                self.filter(scientific_name__icontains=query))
+    def search(self, query):
+        """Search species by common name, scientific name, or fauna group"""
+        if not query:
+            return self.none()
+        
+        return self.filter(
+            Q(common_name__icontains=query) |
+            Q(scientific_name__icontains=query) |
+            Q(fauna_group__name__icontains=query) |
+            Q(threat_status__label__icontains=query)
+        ).select_related('fauna_group', 'threat_status').distinct()
 
 class Species(models.Model):
     objects = SpeciesManager()
@@ -234,6 +242,16 @@ class RecordingManager(models.Manager):
                 .annotate(flagged_count=Count('anomaly'))
                 .filter(flagged_count__gte=3)
                 .order_by('-flagged_count'))
+    def search(self, query):
+        """Search recordings by species name or username"""
+        if not query:
+            return self.none()
+        
+        return self.get_timeline().filter(
+            Q(species__common_name__icontains=query) |
+            Q(species__scientific_name__icontains=query) |
+            Q(user__username__icontains=query)
+        ).distinct()
 
     def get_users_with_high_rejections(self):
         from django.db.models import Count
@@ -321,6 +339,17 @@ class AnomalyManager(models.Manager):
         # Returns all anomalies based on species
         return (self.filter(recording__species=species)
                 .select_related('recording', 'flagged_by'))
+    
+    def search(self, query):
+        """Search anomalies by species name or username who flagged it"""
+        if not query:
+            return self.none()
+        
+        return self.get_unresolved().filter(
+            Q(recording__species__common_name__icontains=query) |
+            Q(recording__species__scientific_name__icontains=query) |
+            Q(flagged_by__username__icontains=query)
+        ).distinct()
     
 class Anomaly(models.Model):
     objects = AnomalyManager()

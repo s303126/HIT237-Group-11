@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<section>
+  <h2>Search Results</h2>
+  
+  {% if query %}
+    <p>Results for "<strong>{{ query }}</strong>" in 
+      {% if search_type == 'recordings' %}
+        Recordings
+      {% elif search_type == 'species' %}
+        Species
+      {% elif search_type == 'anomalies' %}
+        Anomalies
+      {% endif %}
+    </p>
+    
+    {% if results %}
+      <p>Found {{ results|length }} result(s)</p>
+      
+      {% if search_type == 'recordings' %}
+        {% include 'search_partials/_recording_results.html' %}
+      {% elif search_type == 'species' %}
+        {% include 'search_partials/_species_results.html' %}
+      {% elif search_type == 'anomalies' %}
+        {% include 'search_partials/_anomaly_results.html' %}
+      {% endif %}
+    {% else %}
+      <p>No results found matching "{{ query }}" in this category.</p>
+      <form method="get" action="{% url 'search' %}">
+        <input type="hidden" name="type" value="{{ search_type }}">
+        <input type="text" name="query" placeholder="Insert search term..." value="{{ request.GET.query }}">
+        <button type="submit">Search</button>
+      </form>
+    {% endif %}
+  {% else %}
+    <p>Enter a search term below to find results.</p>
+      <form method="get" action="{% url 'search' %}">
+        <input type="hidden" name="type" value="{{ search_type }}">
+        <input type="text" name="query" placeholder="Insert search term..." value="{{ request.GET.query }}">
+        <button type="submit">Search</button>
+      </form>
+  {% endif %}
+</section>
+{% endblock %}

@@ -175,12 +175,11 @@ class ReviewQueueView(LoginRequiredMixin, StaffRequiredMixin, ListView):
 
     def get_queryset(self):
         status_filter = self.request.GET.get('status', 'under_review')
-        if status_filter in ['under_review', 'approved', 'rejected']:
-            qs = Recording.objects.filter(status=status_filter).select_related('species', 'user')
-            if status_filter == 'approved':
-                cutoff = timezone.now() - timezone.timedelta(days=7)
-                qs = qs.filter(approved_at__gte=cutoff)
-            return qs.order_by('-date_submitted')
+        if status_filter == 'approved':
+            return Recording.objects.get_recently_approved()
+        elif status_filter == 'rejected':
+            return Recording.objects.get_rejected()
+        return Recording.objects.get_pending_review()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -191,24 +190,19 @@ class ReviewQueueView(LoginRequiredMixin, StaffRequiredMixin, ListView):
 class RecordingApproveView(LoginRequiredMixin, StaffRequiredMixin, View):
     def post(self, request, pk):
         recording = get_object_or_404(Recording, pk=pk)
-        recording.status = 'approved'
-        recording.approved_at = timezone.now()
-        recording.save()
+        recording.approve()
         return redirect('review_queue')
     
 class RecordingRejectView(LoginRequiredMixin, StaffRequiredMixin, View):
     def post(self, request, pk):
         recording = get_object_or_404(Recording, pk=pk, status='under_review')
-        recording.status = 'rejected'
-        recording.save()
+        recording.reject()
         return redirect('review_queue')
 
 class RecordingRestoreView(LoginRequiredMixin, StaffRequiredMixin, View):
     def post(self, request, pk):
         recording = get_object_or_404(Recording, pk=pk, status='rejected')
-        recording.status = 'approved'
-        recording.approved_at = timezone.now()
-        recording.save()
+        recording.approve()
         return redirect('review_queue')
 
 class RecordingDetailView(DetailView):

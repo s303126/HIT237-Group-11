@@ -242,6 +242,19 @@ class RecordingManager(models.Manager):
                 .annotate(rejected_count=Count('id'))
                 .filter(rejected_count__gte=3)
                 .order_by('-rejected_count'))
+    
+    def get_pending_review(self):
+        """Returns all recordings awaiting review."""
+        return self.filter(status='under_review').select_related('species', 'user').order_by('-date_submitted')
+
+    def get_rejected(self):
+        """Returns all rejected recordings."""
+        return self.filter(status='rejected').select_related('species', 'user').order_by('-date_submitted')
+
+    def get_recently_approved(self, days=7):
+        """Returns recordings approved within the last N days."""
+        cutoff = timezone.now() - timezone.timedelta(days=days)
+        return self.filter(status='approved', approved_at__gte=cutoff).select_related('species', 'user').order_by('-date_submitted')
 
 class Recording(models.Model):
     STATUS_CHOICES = [
@@ -281,6 +294,16 @@ class Recording(models.Model):
         """Returns True if any linked Anomaly records are unresolved."""
         return self.anomaly_set.filter(resolved=False).exists()
     
+    def approve(self):
+        """Marks this recording as approved."""
+        self.status = 'approved'
+        self.approved_at = timezone.now()
+        self.save()
+
+    def reject(self):
+        """Marks this recording as rejected."""
+        self.status = 'rejected'
+        self.save()
 
 class AnomalyManager(models.Manager):
     def get_unresolved(self):

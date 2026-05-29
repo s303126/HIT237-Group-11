@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Anomaly, Recording, User, Species
 from accounts.mixins import StaffRequiredMixin, OwnerOrStaffRequiredMixin
+from django.core.paginator import Paginator
 User = get_user_model()
 
 from .services import validate_recording_duplicate, validate_anomaly_duplicate, validate_audio_file, validate_anomaly_not_resolved
@@ -26,7 +27,10 @@ def search(request):
     #Search view that handles recordings, species, and anomalies. Uses query parameter 'type' to determine which search to perform.
 
     query = request.GET.get('query', '').strip()
-    search_type = request.GET.get('type', 'recordings')  # Default to recordings
+    search_type = request.GET.get('type', 'recordings')
+    page_num = request.GET.get('page', 1)
+
+
     
     if query:
         if search_type == 'recordings':
@@ -38,7 +42,10 @@ def search(request):
     else:     
         results = []
     
-    return render(request, 'search.html', {'query': query, 'search_type': search_type, 'results': results})
+    paginator = Paginator(results, 5)
+    page_obj = paginator.get_page(page_num)
+
+    return render(request, 'search.html', {'query': query, 'search_type': search_type, 'results': page_obj.object_list if page_obj else results, 'paginator': paginator, 'page_obj': page_obj})
  
 class HomepageView(TemplateView):
     template_name = "home.html"
@@ -52,12 +59,13 @@ class ViewSubmissionsView(ListView):
     queryset = Recording.objects.get_timeline()
     template_name = "recordings/recording_list.html"
     context_object_name = "recordings"
+    paginate_by = 5
 
 class SpeciesListView(ListView):
     queryset = Species.objects.get_with_recording_counts()
     template_name = "species/species_list.html"
     context_object_name = "species_list"
-
+    paginate_by = 5
 
 class SpeciesDetailView(DetailView):
     model = Species
@@ -75,6 +83,7 @@ class AnomalyListView(ListView):
     model = Anomaly
     template_name = "anomalies/anomaly_list.html"
     context_object_name = "anomalies"
+    paginate_by = 5
 
     def get_queryset(self):
         return Anomaly.objects.get_unresolved()

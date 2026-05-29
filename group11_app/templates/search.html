@@ -7,7 +7,8 @@
   <h2>Search Results</h2>
   
   {% if query %}
-    <p>Results for "<strong>{{ query }}</strong>" in 
+    <p>
+      Results for "<strong>{{ query }}</strong>" in 
       {% if search_type == 'recordings' %}
         Recordings
       {% elif search_type == 'species' %}
@@ -18,7 +19,8 @@
     </p>
     
     {% if results %}
-      <p>Found {{ results|length }} result(s)</p>
+      {# Uses paginator count instead of results|length #}
+      <p>Found {{ paginator.count }} result(s)</p>
       
       {% if search_type == 'recordings' %}
         {% include 'search_partials/_recording_results.html' %}
@@ -27,21 +29,38 @@
       {% elif search_type == 'anomalies' %}
         {% include 'search_partials/_anomaly_results.html' %}
       {% endif %}
+
+      {# Pagination added from first snippet #}
+      {% include 'partials/_pagination.html' %}
+      
     {% else %}
       <p>No results found matching "{{ query }}" in this category.</p>
+
       <form method="get" action="{% url 'search' %}">
         <input type="hidden" name="type" value="{{ search_type }}">
-        <input type="text" name="query" placeholder="Insert search term..." value="{{ request.GET.query }}">
+        <input
+          type="text"
+          name="query"
+          placeholder="Insert search term..."
+          value="{{ request.GET.query }}"
+        >
         <button type="submit">Search</button>
       </form>
     {% endif %}
+    
   {% else %}
     <p>Enter a search term below to find results.</p>
-      <form method="get" action="{% url 'search' %}">
-        <input type="hidden" name="type" value="{{ search_type }}">
-        <input type="text" name="query" placeholder="Insert search term..." value="{{ request.GET.query }}">
-        <button type="submit">Search</button>
-      </form>
+
+    <form method="get" action="{% url 'search' %}">
+      <input type="hidden" name="type" value="{{ search_type }}">
+      <input
+        type="text"
+        name="query"
+        placeholder="Insert search term..."
+        value="{{ request.GET.query }}"
+      >
+      <button type="submit">Search</button>
+    </form>
   {% endif %}
 </section>
 {% endblock %}

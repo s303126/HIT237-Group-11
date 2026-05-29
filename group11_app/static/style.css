@@ -125,15 +125,6 @@ main {
   border-radius: 6px;
 }
 
-.button-active {
-    background-color: #1f3f36;
-}
-
-.card-container {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
 
 .card,
 .submission-card {
@@ -186,4 +177,60 @@ button {
   margin-top: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+.pagination {
+  width: 100%;
+  margin-top: 1.5rem;          /* space below cards */
+  padding: 1rem;
+  background-color: #2f5d50;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.pagination nav {
+  display: flex;
+  align-items: center;
+  background: none;
+  gap: 1rem;
+}
+
+.pagination-left,
+.pagination-center,
+.pagination-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.pagination-left {
+  justify-content: flex-start;
+}
+
+.pagination-center {
+  justify-content: center;
+}
+
+.pagination-right {
+  justify-content: flex-end;
+}
+
+.pagination .page-info {
+  color: white;
+  font-weight: bold;
+}
+
+.pagination .button {
+  margin: 0;
+}
+
+.pagination .button:hover {
+  background-color: #24493f; /* slightly darker green */
+  transition: background-color 0.2s ease;
+}
+
+.pagination-left:empty + .pagination-center {
+  justify-content: flex-start;
 }

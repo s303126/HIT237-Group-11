@@ -40,6 +40,8 @@
     {% empty %}
       <p>No species available.</p>
     {% endfor %}
+    {% include 'partials/_pagination.html' %}
+
   </div>
 </section>
 {% endblock %}

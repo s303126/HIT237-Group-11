@@ -1,0 +1,29 @@
+{% if paginator %}
+  <div class="pagination">
+    <nav>
+
+      <div class="pagination-left">
+        {% if page_obj.has_previous %}
+          <a class="button" href="?{% if query %}query={{ query }}&{% endif %}{% if search_type %}type={{ search_type }}&{% endif %}page=1">First</a>
+
+          <a class="button" href="?{% if query %}query={{ query }}&{% endif %}{% if search_type %}type={{ search_type }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+      </div>
+
+      <div class="pagination-center">
+        <span class="page-info">
+          Page {{ page_obj.number }} of {{ paginator.num_pages }}
+        </span>
+      </div>
+
+      <div class="pagination-right">
+        {% if page_obj.has_next %}
+          <a class="button" href="?{% if query %}query={{ query }}&{% endif %}{% if search_type %}type={{ search_type }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+
+          <a class="button" href="?{% if query %}query={{ query }}&{% endif %}{% if search_type %}type={{ search_type }}&{% endif %}page={{ paginator.num_pages }}">Last</a>
+        {% endif %}
+      </div>
+
+    </nav>
+  </div>
+{% endif %}

@@ -8,6 +8,15 @@
   <p>
     Review unresolved anomaly reports linked to submitted recordings.
   </p>
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="alert {{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
   <form method="get" action="{% url 'search' %}">
     <input type="hidden" name="type" value="anomalies">

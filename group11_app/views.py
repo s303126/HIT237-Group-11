@@ -1,15 +1,15 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
-from django.views import View
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import View, TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.utils import timezone
-from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.http import HttpResponseForbidden
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Anomaly, Recording, User, Species
 from accounts.mixins import StaffRequiredMixin, OwnerOrStaffRequiredMixin
 from django.core.paginator import Paginator
+
 User = get_user_model()
 
 from .services import validate_recording_duplicate, validate_anomaly_duplicate, validate_audio_file, validate_anomaly_not_resolved
@@ -126,19 +126,20 @@ class AnomalyCreateView(LoginRequiredMixin, CreateView):
 class AnomalyResolveView(LoginRequiredMixin, View):
     def post(self, request, pk):
         anomaly = get_object_or_404(Anomaly, pk=pk)
-        
-        # Check permission: researcher OR the user who flagged it
+
+        # Permission check
         if not request.user.has_researcher_access() and anomaly.flagged_by != request.user:
-            return HttpResponseForbidden("You do not have permission to resolve this anomaly.")
-        
-        try:
-            validate_anomaly_not_resolved(anomaly)
-        except AnomalyAlreadyResolved as e:
-            messages.error(request, str(e))
-            return redirect(reverse_lazy("anomaly_list"))
-        
+            messages.error(request, "You do not have permission to resolve this anomaly.")
+            return redirect("anomaly_list")
+
+        # Already-resolved check
+        if anomaly.is_resolved:
+            messages.error(request, "This anomaly has already been resolved.")
+            return redirect("anomaly_list")
+
         anomaly.resolve(request.user)
-        return redirect(reverse_lazy("anomaly_list"))
+        messages.success(request, "Anomaly resolved successfully.")
+        return redirect("anomaly_list")
 
 class RecordingCreateView(LoginRequiredMixin, CreateView):
     model = Recording

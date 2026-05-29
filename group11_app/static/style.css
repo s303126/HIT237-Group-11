@@ -99,6 +99,21 @@ main {
   margin-top: 1rem;
 }
 
+.button-group .inline-form button {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    margin-top: 0;
+    margin-right: 0.75rem;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.inline-form {
+    display: inline-block;
+    margin-right: 0.75rem;
+    margin-top: 0.5rem;
+}
+
 .button {
   display: inline-block;
   background-color: #2f5d50;
@@ -106,7 +121,12 @@ main {
   text-decoration: none;
   padding: 0.75rem 1rem;
   margin-right: 0.75rem;
+  margin-top: 0.5rem;
   border-radius: 6px;
+}
+
+.button-active {
+    background-color: #1f3f36;
 }
 
 .card-container {

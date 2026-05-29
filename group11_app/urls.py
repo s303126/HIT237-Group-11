@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import AnomalyListView, ViewSubmissionsView
+from .views import ReviewQueueView, RecordingApproveView, RecordingRejectView, RecordingRestoreView
 from .views import HomepageView
 from .views import RecordingCreateView
 from .views import SpeciesListView
@@ -22,4 +23,8 @@ urlpatterns = [
     path("", HomepageView.as_view(), name="home"),
     path("recordings/<int:pk>/edit/", RecordingUpdateView.as_view(), name="recording_update"),
     path("recordings/<int:pk>/delete/", RecordingDeleteView.as_view(), name="recording_delete"),
+    path("recordings/review/", ReviewQueueView.as_view(), name="review_queue"),
+    path("recordings/<int:pk>/approve/", RecordingApproveView.as_view(), name="recording_approve"),
+    path("recordings/<int:pk>/reject/", RecordingRejectView.as_view(), name="recording_reject"),
+    path("recordings/<int:pk>/restore/", RecordingRestoreView.as_view(), name="recording_restore"),
 ]

@@ -165,11 +165,16 @@ class User(AbstractUser):
         """True only if user is an approved researcher."""
         return self.role == 'researcher' and self.is_approved
     
+    def get_pending_review_count(self):
+        """Returns the number of recordings pending researcher review."""
+        return Recording.objects.filter(status='under_review').count()
+    
 class RecordingManager(models.Manager):
     def get_timeline(self):
         # Returns all recordings ordered newest first, with related
         #species, user and anomalies pre-fetched to avoid extra database queries
-        return (self.select_related('species', 'user')
+        return (self.filter(status='approved')
+                .select_related('species', 'user')
                 .prefetch_related('anomaly_set')
                 .order_by('-date_recorded'))
     
@@ -230,13 +235,28 @@ class RecordingManager(models.Manager):
                 .filter(flagged_count__gte=3)
                 .order_by('-flagged_count'))
 
+    def get_users_with_high_rejections(self):
+        from django.db.models import Count
+        return (self.filter(status='rejected')
+                .values('user__username')
+                .annotate(rejected_count=Count('id'))
+                .filter(rejected_count__gte=3)
+                .order_by('-rejected_count'))
+
 class Recording(models.Model):
+    STATUS_CHOICES = [
+        ('approved', 'Approved'),
+        ('under_review', 'Under Review'),
+        ('rejected', 'Rejected'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='under_review')
     ROLE_CHOICES = [('citizen', 'Citizen Scientist'), ('researcher', 'Researcher'),]
     objects = RecordingManager()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     species = models.ForeignKey(Species, on_delete=models.PROTECT)
     date_recorded = models.DateTimeField()
     date_submitted = models.DateTimeField(auto_now_add=True)
+    approved_at = models.DateTimeField(null=True, blank=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     location_name = models.CharField(max_length=100, blank=True)

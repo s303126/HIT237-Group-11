@@ -21,6 +21,11 @@
       <li><a href="{% url 'recording_list' %}">View Timeline</a></li>
       <li><a href="{% url 'species_list' %}">Species</a></li>
       <li><a href="{% url 'anomaly_list' %}">Anomalies</a></li>
+      {% if user.is_authenticated and user.has_researcher_access %}
+        {% with pending_count=user.get_pending_review_count %}
+          <li><a href="{% url 'review_queue' %}">Review Queue{% if pending_count %} ({{ pending_count }}){% endif %}</a></li>
+        {% endwith %}
+      {% endif %}
       {% if user.is_authenticated %}
         <li class="nav-user-item">
           <span class="nav-user">

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.views import View
+from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.http import HttpResponseForbidden
@@ -55,6 +56,11 @@ class AnomalyListView(ListView):
 
     def get_queryset(self):
         return Anomaly.objects.get_unresolved()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flagged_users'] = Recording.objects.get_users_with_high_flags()
+        return context
 
 
 class AnomalyCreateView(LoginRequiredMixin, CreateView):
@@ -133,6 +139,8 @@ class RecordingCreateView(LoginRequiredMixin, CreateView):
             return self.form_invalid(form)
         
         form.instance.user = self.request.user
+        if self.request.user.has_researcher_access():
+            form.instance.status = 'approved'
         return super().form_valid(form)
 
 class RecordingUpdateView(LoginRequiredMixin, OwnerOrStaffRequiredMixin, UpdateView):
@@ -160,6 +168,48 @@ class RecordingUpdateView(LoginRequiredMixin, OwnerOrStaffRequiredMixin, UpdateV
             return self.form_invalid(form)
         
         return super().form_valid(form)
+
+class ReviewQueueView(LoginRequiredMixin, StaffRequiredMixin, ListView):
+    template_name = "recordings/recording_review.html"
+    context_object_name = "recordings"
+
+    def get_queryset(self):
+        status_filter = self.request.GET.get('status', 'under_review')
+        if status_filter in ['under_review', 'approved', 'rejected']:
+            qs = Recording.objects.filter(status=status_filter).select_related('species', 'user')
+            if status_filter == 'approved':
+                cutoff = timezone.now() - timezone.timedelta(days=7)
+                qs = qs.filter(approved_at__gte=cutoff)
+            return qs.order_by('-date_submitted')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_filter'] = self.request.GET.get('status', 'under_review')
+        context['rejected_users'] = Recording.objects.get_users_with_high_rejections()
+        return context
+
+class RecordingApproveView(LoginRequiredMixin, StaffRequiredMixin, View):
+    def post(self, request, pk):
+        recording = get_object_or_404(Recording, pk=pk)
+        recording.status = 'approved'
+        recording.approved_at = timezone.now()
+        recording.save()
+        return redirect('review_queue')
+    
+class RecordingRejectView(LoginRequiredMixin, StaffRequiredMixin, View):
+    def post(self, request, pk):
+        recording = get_object_or_404(Recording, pk=pk, status='under_review')
+        recording.status = 'rejected'
+        recording.save()
+        return redirect('review_queue')
+
+class RecordingRestoreView(LoginRequiredMixin, StaffRequiredMixin, View):
+    def post(self, request, pk):
+        recording = get_object_or_404(Recording, pk=pk, status='rejected')
+        recording.status = 'approved'
+        recording.approved_at = timezone.now()
+        recording.save()
+        return redirect('review_queue')
 
 class RecordingDetailView(DetailView):
     model = Recording

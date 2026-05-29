@@ -30,4 +30,4 @@ group11_app/admin.py: UserAdmin with list_editable and approve_researchers actio
 group11_app/templates/base.html: pending status displa
 
 **Consequences:**
-Users who select researcher at signup are given citizen scientist permissions until approved. Existing researcher accounts created before this change will need to be manually approved via admin. Group members must run migrations after pulling this change.
+Users who select researcher at signup are given citizen scientist permissions until approved. Existing researcher accounts created before this change will need to be manually approved via admin. Without this system any user could self-select researcher at signup and immediately gain access to edit or delete other user's data. Group members must run migrations after pulling this change.

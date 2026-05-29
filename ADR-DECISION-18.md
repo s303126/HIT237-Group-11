@@ -18,6 +18,8 @@ The site has two user roles (researcher and citizen_scientist) in addition to an
 
 - Option 2:  Django's built-in UserPassesTestMixin or PermissionRequiredMixin. More flexible but relies on Django's permission framework which is not aligned with the custom role field on the User model.
 
+- Option 3: Use decorators to restrict access on each view. Works well for function-based views but the site uses class-based views throughout. Using decorators on class-based views requires method_decorator workaround.
+
 **Decision:**  
 Implement two custom mixins to enforce role-based access across views. LoginRequiredMixin restricts submission and flagging to authenticated users (citizen scientists). StaffRequiredMixin restricts edit, delete and anomaly resolution to researchers. Permissions are applied as follows:
 
@@ -34,4 +36,4 @@ accounts/mixins.py
 group11_app/views.py (LoginRequiredMixin and StaffRequiredMixin applied to views)
 
 **Consequences:**  
-Access is restricted based on user role. Anonymous users retain read access to the site. The custom mixin is reusable across any view that requires researcher access. Future consideration: researcher role is currently self-selected at registration and has no verification process.
+Access is restricted based on user role. Anonymous users retain read access to the site. The custom mixin is reusable across any view that requires researcher access. Permission checks are enforced server-side through the mixin, so they cannot be bypassed through frontend manipulation or direct URL access. Future consideration: researcher role is currently self-selected at registration and has no verification process.

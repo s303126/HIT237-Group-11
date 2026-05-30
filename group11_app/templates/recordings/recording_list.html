@@ -18,6 +18,7 @@
     <div class="record-card">
       <h3>{{ recording.species.common_name }}</h3>
       <p><strong>Scientific Name:</strong> {{ recording.species.scientific_name }}</p>
+      <p><strong>Threat Status:</strong> {{ recording.species.threat_status.label|default:"Not assessed" }}</p>
       <p><strong>Date Recorded:</strong> {{ recording.date_recorded }}</p>
       <p><strong>Location:</strong> {{ recording.location_name }}</p>
       <p><strong>Submitted By:</strong> {{ recording.user.username }}</p>

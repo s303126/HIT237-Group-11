@@ -51,13 +51,13 @@
   {% empty %}
     <p>No anomaly reports available.</p>
   {% endfor %}
-  {% if flagged_users %}
-    <h3>Users with 3+ Flagged Recordings</h3>
-    {% for user in flagged_users %}
-      <div class="record-card">
-        <p><strong>{{ user.user__username }}</strong> ({{ user.flagged_count }} flags)</p>
-      </div>
-    {% endfor %}
+  {% if user.has_researcher_access and flagged_users %}
+      <h3>Users with 3+ Flagged Recordings</h3>
+      {% for user in flagged_users %}
+        <div class="record-card">
+          <p><strong>{{ user.user__username }}</strong> ({{ user.flagged_count }} flags)</p>
+        </div>
+      {% endfor %}
   {% endif %}
   {% include 'partials/_pagination.html' %}
 </section>

@@ -182,7 +182,7 @@ class RecordingManager(models.Manager):
         # Returns all recordings ordered newest first, with related
         #species, user and anomalies pre-fetched to avoid extra database queries
         return (self.filter(status='approved')
-                .select_related('species', 'user')
+                .select_related('species', 'species__threat_status', 'user')
                 .prefetch_related('anomaly_set')
                 .order_by('-date_recorded'))
     
